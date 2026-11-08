@@ -1,0 +1,1050 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Binder">
+<meta name="theme-color" content="#181c26">
+<link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAIAAACyr5FlAAADT0lEQVR42u3dP07bYBjA4SRirCIWTsDCUHWpxNI19+AO5QK5QHuH3iNrxywVt2BBUQ7AULVCkWOC/b3fH/v5bUAcovjRZ0dgv8vbu/uF1NXKWyA4BIfgEByCQ3AIDsEhOASHBIfgEByCQ3AIDsEhOASH4JD+deUt+Nvh5fntl+vrG++JlaNDRud34CCDDzguEzBzHysyxj8GDvm0kqL99jhgq6/bTz0/fdwcBjznj906w5v46/Om+I58eNolf85l2guph7Ho9zGMxSU+Ljxk9HysrYFFHJG6DisjbSVcclpZMEJf0qq2XXvyJEl2bZwPJ6RqY9lI/sLgEByCQ3AIDsEhOASH4BAcgkOCQ3AIDsEhOASH4BAcgkNwSHAIDsGh2nH0Xwk97EmSXAmd53JqOGJ9dG4+cteSUdFhZbCPng0H72AyxhRyf44kxxe72Qmp4BAcgkNwCA4JDsEhOASH4BAcaihjvMr07eeXcz/6/f0PHEy885jiSkJwRIy/iBjTUaGMk8eX9XFVA4v/23b6GHO//f32WIOPj7I42bAUkbpOSCPGG0SM6cgjI+EzlMcRMf4iYkxHWzIK+vBRtgEZpXzA0YaMIj7gaEZGfh9wCI5JLBuZFw84BIfgmPwxJedvgUNwCA7BITgEh+AQHPMuz39t5fktcAgOwTGHI0u2/zeGQ3BMZfHIeZkCHC35yHwBCxzN+Mh/aRMcbfgoctFbShwREw4iJjE052Mil0NGTDiImMSQ38ewHTx4w0oPKxETDiImMdS/hEzzFgwREw6q2s3jfbh5ixb1C/BpRXAIDsEhOASH4BAcgkNwSHAIDsGh2EL+Khsx4SBiEoOyrhz77XHwjcbPbfi4OQy+q3rEnfbhKFPEHez5qAJHxISDiEkMckIqOASH4BAcgkNwCA7BIcEhOASH4BAcgkNwCA7BITgEhwSH4BAcgkNwtNfD027yLywljojxFxFjOpAts3JEjL+IGNMxycUj+etJf1iJGH8RMaYj1f6ohEjEy1je3t3P9rzh8PJ8ycPW1zdOSCU4PrIkzHbZsHK8s+/nLAOOPgEzlwHHWQdkLMx4o8HKITgEh+AQHIJDcAgOwSE4JDgEh+AQHIJDcAgOwSE4BIf0pldXPATE7ThWmgAAAABJRU5ErkJggg==">
+<title>Binderplaner</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23232836'/%3E%3Crect x='30' y='8' width='4' height='48' rx='2' fill='%23151821'/%3E%3Cg fill='%23f0a82a'%3E%3Crect x='9' y='10' width='8' height='11' rx='1.5'/%3E%3Crect x='19' y='10' width='8' height='11' rx='1.5' opacity='.55'/%3E%3Crect x='9' y='26.5' width='8' height='11' rx='1.5' opacity='.55'/%3E%3Crect x='19' y='26.5' width='8' height='11' rx='1.5'/%3E%3Crect x='9' y='43' width='8' height='11' rx='1.5'/%3E%3Crect x='19' y='43' width='8' height='11' rx='1.5' opacity='.55'/%3E%3Crect x='37' y='10' width='18' height='44' rx='2' fill='%23c4547a'/%3E%3Ccircle cx='46' cy='32' r='6' fill='%23ffe2a8'/%3E%3C/g%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Figtree:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+/* Layout: app bar on top · tool sidebar left · binder spread fills the stage; all binder geometry in real mm × scale u */
+:root{
+  --bg:#e8ebf1; --panel:#fbfcfe; --ink:#161b26; --muted:#5d667d; --line:#d2d7e1;
+  --accent:#d68c0c; --accent-ink:#1b1305; --sel:#2f6fed; --ok:#1f9d61; --warn:#c2412d;
+  --binder:#232836; --sheet:#2b3141; --pocket:#353c4f; --pocket-line:rgba(255,255,255,.09);
+  --f-display:"Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --f-body:"Figtree", "Segoe UI", system-ui, sans-serif;
+  --f-mono:"JetBrains Mono", ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#10131a; --panel:#181c26; --ink:#e7eaf1; --muted:#97a0b6; --line:#293042;
+  --accent:#f0a82a; --sel:#6f9cff; --ok:#3cc283; --warn:#f0705c;
+  --binder:#0a0c11; --sheet:#1b2030; --pocket:#262c3e; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#10131a; --panel:#181c26; --ink:#e7eaf1; --muted:#97a0b6; --line:#293042;
+  --accent:#f0a82a; --sel:#6f9cff; --ok:#3cc283; --warn:#f0705c;
+  --binder:#0a0c11; --sheet:#1b2030; --pocket:#262c3e; color-scheme:dark}
+
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{height:100%;margin:0}
+body{background:var(--bg);color:var(--ink);font:14px/1.45 var(--f-body)}
+button,input,select{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--sel);outline-offset:2px}
+
+#app{display:flex;flex-direction:column;height:100%}
+#app>header{flex:none;position:relative;z-index:6}
+#binderView,#mastersView{flex:1 1 0;min-height:0}
+header.bar{display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;padding:10px max(16px,env(safe-area-inset-right,0px)) 10px max(16px,env(safe-area-inset-left,0px));background:var(--panel);border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:center;gap:10px;font:800 20px/1 var(--f-display);letter-spacing:-.01em}
+.mark{width:26px;height:26px;display:grid;grid-template-columns:repeat(3,1fr);gap:2px;padding:3px;background:var(--binder);border-radius:5px}
+.mark i{background:var(--accent);border-radius:1px;opacity:.9}
+.mark i:nth-child(2n){opacity:.45}
+#binderName{border:1px solid transparent;background:none;padding:4px 6px;border-radius:6px;font-weight:600;min-width:0;width:12em}
+#binderName:hover,#binderName:focus{border-color:var(--line)}
+.grow{flex:1}
+.ctl{display:flex;align-items:center;gap:6px;color:var(--muted);font-size:13px}
+.ctl select,.ctl input[type=number]{background:var(--bg);border:1px solid var(--line);border-radius:7px;padding:5px 8px;color:var(--ink)}
+.ctl input[type=number]{width:4.5em}
+.btn{border:1px solid var(--line);background:var(--panel);border-radius:8px;padding:6px 11px;font-weight:600;font-size:13px;display:inline-flex;align-items:center;gap:6px}
+.btn:hover{border-color:var(--muted)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.btn.small{padding:4px 8px;font-size:12px}
+.btn:disabled{opacity:.45;cursor:default}
+.stepper{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.stepper button{border:0;background:var(--panel);width:28px;height:28px;font-weight:700}
+.stepper span{min-width:2.2em;text-align:center;align-self:center;font:600 13px var(--f-mono);color:var(--ink)}
+
+main{display:grid;grid-template-columns:360px 1fr;min-height:0}
+aside{background:var(--panel);border-right:1px solid var(--line);display:flex;flex-direction:column;min-height:0}
+.tabs{display:flex;border-bottom:1px solid var(--line);padding:0 12px}
+.tabs button{border:0;background:none;padding:11px 12px 9px;font-weight:600;color:var(--muted);border-bottom:2px solid transparent}
+.tabs button[aria-selected=true]{color:var(--ink);border-bottom-color:var(--accent)}
+.pane{padding:14px 16px;overflow:auto;flex:1;min-height:0;display:flex;flex-direction:column;gap:12px}
+.pane[hidden]{display:none!important}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.row>input[type=text],.row>input[type=url],.row>select{flex:1;min-width:0}
+input[type=text],input[type=url],select.full{background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:7px 10px;color:var(--ink)}
+label.lbl{font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);font-weight:700}
+.hint{color:var(--muted);font-size:12.5px}
+.hint b{color:var(--ink)}
+.status{font-size:12.5px;color:var(--muted);min-height:1.2em}
+.status.err{color:var(--warn)}
+
+#results{display:grid;grid-template-columns:repeat(auto-fill,minmax(92px,1fr));gap:10px}
+.res{border:0;background:none;padding:0;text-align:left;display:flex;flex-direction:column;gap:4px;cursor:grab}
+.res .ph{aspect-ratio:63/88;width:100%;border-radius:5px;background:var(--bg);overflow:hidden;box-shadow:0 1px 2px rgba(0,0,0,.18)}
+.res img{width:100%;height:100%;object-fit:cover;display:block}
+.res span{font-size:11.5px;line-height:1.25;color:var(--muted)}
+.res span b{color:var(--ink);font-weight:600;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.res:hover .ph{outline:2px solid var(--accent)}
+.mono{font-family:var(--f-mono)}
+
+/* stage */
+.stagewrap{display:flex;flex-direction:column;min-width:0;min-height:0}
+.nav{display:flex;align-items:center;justify-content:center;gap:12px;padding:10px 16px 0}
+.nav h2{margin:0;font:700 17px var(--f-display);min-width:9em;text-align:center}
+.nav .sub{font-size:12px;color:var(--muted)}
+#stage{flex:1;min-height:300px;display:grid;place-items:center;padding:12px;overflow:auto}
+#spread{display:flex;background:var(--binder);border-radius:10px;box-shadow:0 18px 40px -18px rgba(0,0,0,.55),inset 0 0 0 1px rgba(255,255,255,.04);user-select:none;-webkit-user-select:none}
+#spread.stacked{flex-direction:column}
+.page{background:var(--sheet);display:grid;align-content:start;position:relative}
+.page::after{content:attr(data-label);position:absolute;bottom:2px;right:8px;font:600 10px var(--f-mono);color:rgba(255,255,255,.28)}
+.spine{background:repeating-linear-gradient(180deg,transparent 0 18%,rgba(255,255,255,.07) 18% 20%);}
+.slot{position:relative;background:var(--pocket);border-radius:3px;overflow:hidden;box-shadow:inset 0 0 0 1px var(--pocket-line)}
+.slot .num{position:absolute;inset:0;display:grid;place-items:center;font:600 12px var(--f-mono);color:rgba(255,255,255,.22);pointer-events:none}
+.slot .tile{position:absolute;max-width:none;pointer-events:none}
+.slot .card{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:3px;pointer-events:none;z-index:2}
+.slot::after{content:"";position:absolute;inset:0;background:linear-gradient(125deg,rgba(255,255,255,.13),transparent 38%);pointer-events:none;z-index:3}
+.slot.sel{box-shadow:0 0 0 3px var(--sel);z-index:4}
+.slot.art-active::before{content:"";position:absolute;inset:0;border:2px dashed var(--accent);z-index:3;pointer-events:none}
+.slot.picking{box-shadow:0 0 0 3px var(--accent);z-index:4}
+.slot.missing .card{filter:grayscale(1) brightness(.6)}
+.slot.dragover{box-shadow:0 0 0 3px var(--accent)}
+.acts{position:absolute;top:4px;right:4px;display:flex;gap:3px;z-index:5;opacity:0;transition:opacity .12s}
+.slot:hover .acts,.slot.sel .acts{opacity:1}
+.acts button{width:22px;height:22px;border-radius:50%;border:0;background:rgba(10,12,18,.78);color:#fff;font-size:12px;line-height:22px;padding:0}
+.acts button.on{background:var(--ok)}
+.badge{position:absolute;left:4px;bottom:4px;z-index:5;background:rgba(10,12,18,.78);color:#fff;font:600 9.5px var(--f-mono);padding:1px 5px;border-radius:4px;pointer-events:none}
+#stage.pickmode .slot{cursor:crosshair}
+#stage.pickmode{touch-action:none}
+
+#strip{display:flex;gap:6px;overflow-x:auto;padding:4px 16px 14px;justify-content:center;flex-wrap:wrap}
+#strip button{border:1px solid var(--line);background:var(--panel);border-radius:7px;padding:4px 9px;font:600 12px var(--f-mono);display:flex;flex-direction:column;align-items:center;gap:1px}
+#strip button small{font:500 10px var(--f-body);color:var(--muted)}
+#strip button[aria-current=true]{border-color:var(--accent);box-shadow:inset 0 -2px 0 var(--accent)}
+
+/* artworks */
+.drop{border:1.5px dashed var(--line);border-radius:10px;padding:14px;text-align:center;color:var(--muted);font-size:13px}
+.drop.over{border-color:var(--accent);color:var(--ink)}
+.art{border:1px solid var(--line);border-radius:10px;padding:10px;display:flex;flex-direction:column;gap:10px;background:var(--panel)}
+.art.active{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent)}
+.art-head{display:flex;gap:10px;align-items:center;cursor:pointer}
+.art-head img{width:58px;height:40px;object-fit:cover;border-radius:5px;background:var(--bg);flex:none}
+.art-head div{min-width:0;flex:1}
+.art-head b{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.art-head small{color:var(--muted);font-size:12px}
+.sl{display:grid;grid-template-columns:70px 1fr 42px;align-items:center;gap:8px;font-size:12.5px;color:var(--muted)}
+.sl output{font:12px var(--f-mono);text-align:right}
+input[type=range]{accent-color:var(--accent);width:100%}
+fieldset{border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin:0;display:flex;flex-direction:column;gap:8px}
+legend{font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);font-weight:700;padding:0 4px}
+.pickbar{position:sticky;top:0;background:var(--accent);color:var(--accent-ink);border-radius:8px;padding:8px 10px;font-weight:600;font-size:13px;display:flex;align-items:center;gap:8px;justify-content:space-between}
+
+/* list */
+table{border-collapse:collapse;width:100%;font-size:12.5px}
+th,td{text-align:left;padding:5px 6px;border-bottom:1px solid var(--line)}
+th{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+td.mono{font-variant-numeric:tabular-nums}
+.pill{display:inline-block;padding:1px 7px;border-radius:99px;font-size:11px;font-weight:700}
+.pill.have{background:color-mix(in srgb,var(--ok) 18%,transparent);color:var(--ok)}
+.pill.need{background:color-mix(in srgb,var(--warn) 16%,transparent);color:var(--warn)}
+.stats{display:flex;gap:16px}
+.stats div{display:flex;flex-direction:column}
+.stats b{font:800 22px var(--f-display)}
+.stats small{color:var(--muted);font-size:11.5px}
+
+/* view switch */
+.seg{display:inline-flex;background:var(--bg);border:1px solid var(--line);border-radius:9px;padding:3px;gap:2px}
+.seg button{border:0;background:none;border-radius:6px;padding:5px 12px;font-weight:600;font-size:13px;color:var(--muted)}
+.seg button[aria-selected=true]{background:var(--panel);color:var(--ink);box-shadow:0 1px 2px rgba(0,0,0,.15)}
+body.mode-masters header .bonly{display:none!important}
+#menuBtn{display:none;font-size:18px;line-height:1;padding:4px 12px}
+#mnav{display:none}
+.target{font-size:12.5px;padding:7px 10px;border-radius:8px;background:color-mix(in srgb,var(--sel) 12%,transparent);color:var(--ink)}
+.target b{color:var(--sel)}
+body{touch-action:manipulation}
+@media (pointer:coarse){
+  input,select,textarea{font-size:16px!important}
+  .acts button{width:30px;height:30px;line-height:30px;font-size:14px}
+  .vars button{padding:5px 8px;font-size:12px}
+  .slot:hover .acts{opacity:0}
+  .slot.sel .acts{opacity:1}
+}
+@media (max-width:700px){
+  header.bar{padding-top:max(10px,env(safe-area-inset-top,0px));gap:8px 10px}
+  .brand{font-size:18px}
+  .seg,.tabs{display:none!important}
+  #menuBtn{display:inline-flex}
+  #binderName{order:5;width:100%;flex:1 1 100%}
+  header .hctl{display:none!important}
+  header.open .hctl{display:flex!important}
+  body.mode-masters header.open .bonly{display:none!important}
+  #mnav{display:grid;grid-template-columns:repeat(5,1fr);position:fixed;left:0;right:0;bottom:0;z-index:20;background:var(--panel);border-top:1px solid var(--line);padding:6px max(6px,env(safe-area-inset-right,0px)) calc(6px + env(safe-area-inset-bottom,0px)) max(6px,env(safe-area-inset-left,0px))}
+  #mnav button{border:0;background:none;display:flex;flex-direction:column;align-items:center;gap:3px;font-size:10.5px;font-weight:600;color:var(--muted);padding:3px 0}
+  #mnav svg{width:23px;height:23px}
+  #mnav button[aria-current=true]{color:var(--accent)}
+  #app{padding-bottom:calc(66px + env(safe-area-inset-bottom,0px))}
+  main#binderView{display:block}
+  body[data-m=binder] #binderView aside{display:none}
+  body:not([data-m=binder]) .stagewrap{display:none}
+  aside{border-top:0!important}
+  #stage{padding:10px 0;min-height:0}
+  .nav{padding:10px 12px 0}
+  #strip{justify-content:flex-start;flex-wrap:nowrap;padding:4px 12px 10px}
+  #mastersView{display:block}
+  #results{grid-template-columns:repeat(3,1fr)}
+  #toast{bottom:calc(84px + env(safe-area-inset-bottom,0px))}
+}
+
+/* mastersets */
+#mastersView{display:grid;grid-template-columns:300px 1fr;min-height:0}
+.ms-side{background:var(--panel);border-right:1px solid var(--line);display:flex;flex-direction:column;min-height:0}
+.ms-list{display:flex;flex-direction:column;gap:6px}
+.ms-item{display:grid;grid-template-columns:44px 1fr;gap:10px;align-items:center;border:1px solid var(--line);border-radius:9px;padding:8px;background:var(--panel);text-align:left}
+.ms-item[aria-current=true]{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent)}
+.ms-item img{width:44px;height:28px;object-fit:contain}
+.ms-item b{display:block;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ms-item small{color:var(--muted);font-size:11.5px;font-variant-numeric:tabular-nums}
+.pbar{height:5px;border-radius:9px;background:var(--line);overflow:hidden;margin-top:4px}
+.pbar i{display:block;height:100%;background:var(--accent);border-radius:9px}
+.pbar.big{height:9px}
+.ms-main{overflow:auto;min-width:0;padding:18px max(16px,env(safe-area-inset-right,0px)) 30px max(16px,env(safe-area-inset-left,0px));display:flex;flex-direction:column;gap:16px}
+.ms-head{display:flex;gap:18px;align-items:center;flex-wrap:wrap}
+.ms-head img.logo{height:56px;max-width:160px;object-fit:contain}
+.ms-head h2{margin:0;font:800 26px/1.1 var(--f-display);letter-spacing:-.01em;text-wrap:balance}
+.ms-head .meta{color:var(--muted);font-size:12.5px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px}
+.kpi{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+.kpi small{display:block;color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.06em;font-weight:700}
+.kpi b{font:800 22px var(--f-display);font-variant-numeric:tabular-nums}
+.kpi .sub{font-size:12px;color:var(--muted)}
+.ms-tools{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center}
+.chips{display:inline-flex;gap:4px}
+.chips button{border:1px solid var(--line);background:var(--panel);border-radius:99px;padding:4px 11px;font-size:12.5px;font-weight:600;color:var(--muted)}
+.chips button[aria-pressed=true]{border-color:var(--ink);color:var(--ink)}
+#msGrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px}
+.mc{display:flex;flex-direction:column;gap:6px;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:8px}
+.mc.done{border-color:color-mix(in srgb,var(--ok) 60%,var(--line))}
+.mc .ph{aspect-ratio:63/88;border-radius:6px;overflow:hidden;background:var(--bg);cursor:pointer;position:relative;border:0;padding:0}
+.mc .ph img{width:100%;height:100%;object-fit:cover;display:block;transition:filter .15s}
+.mc:not(.done):not(.part) .ph img{filter:grayscale(.85) opacity(.55)}
+.mc .ph .ck{position:absolute;top:6px;right:6px;width:24px;height:24px;border-radius:50%;background:var(--ok);color:#fff;display:grid;place-items:center;font-weight:800;font-size:13px}
+.mc .t{display:flex;justify-content:space-between;gap:6px;font-size:12px}
+.mc .t b{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:12.5px}
+.mc .r{color:var(--muted);font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.vars{display:flex;flex-wrap:wrap;gap:4px}
+.vars button{border:1px solid var(--line);background:var(--bg);border-radius:6px;padding:2px 6px;font-size:11px;font-weight:600;display:flex;gap:5px;align-items:center}
+.vars button span{font-family:var(--f-mono);font-weight:400;color:var(--muted)}
+.vars button[aria-pressed=true]{background:color-mix(in srgb,var(--ok) 16%,var(--panel));border-color:var(--ok);color:var(--ok)}
+.vars button[aria-pressed=true] span{color:inherit}
+.mc a{font-size:11px;color:var(--muted)}
+.ms-empty{max-width:520px;margin:40px auto;text-align:center;color:var(--muted)}
+.ms-empty h2{font:800 24px var(--f-display);color:var(--ink)}
+@media (max-width:900px){ #mastersView{grid-template-columns:1fr} .ms-side{border-right:0;border-bottom:1px solid var(--line)} .ms-side .pane{overflow:visible} #msGrid{grid-template-columns:repeat(auto-fill,minmax(130px,1fr))} }
+
+#toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:9px 14px;border-radius:9px;font-weight:600;font-size:13px;z-index:50;opacity:0;transition:opacity .2s;pointer-events:none}
+#toast.show{opacity:1}
+
+/* print modal */
+#printModal{position:fixed;inset:0;background:color-mix(in srgb,var(--bg) 92%,black);z-index:40;overflow:auto;display:flex;flex-direction:column}
+.pm-head{position:sticky;top:0;background:var(--panel);border-bottom:1px solid var(--line);padding:10px 16px;display:flex;gap:12px;align-items:center;flex-wrap:wrap;z-index:2}
+.pm-head h3{margin:0;font:700 17px var(--f-display);margin-right:auto}
+#printRoot{display:flex;flex-direction:column;align-items:center;gap:18px;padding:20px 16px 40px}
+.sheet{width:210mm;height:297mm;background:#fff;color:#111;padding:10mm 9mm;display:flex;flex-direction:column;gap:4mm;box-shadow:0 8px 30px rgba(0,0,0,.25);flex:none}
+.sheet header{font:600 9pt var(--f-body);display:flex;justify-content:space-between;color:#333}
+.sgrid{display:grid;grid-template-columns:repeat(3,63mm);grid-auto-rows:88mm;gap:1.5mm;justify-content:center}
+.ptile{position:relative;overflow:hidden;width:63mm;height:88mm}
+.ptile img{position:absolute;max-width:none}
+.cut .ptile{outline:.1mm solid #9aa}
+.sheet footer{font:7.5pt var(--f-mono);color:#555;margin-top:auto;line-height:1.5}
+.empty-print{color:var(--muted);padding:40px;text-align:center}
+
+@media (max-width:900px){
+  #app{height:auto;min-height:100%}
+  #binderView,#mastersView{flex:none}
+  main{grid-template-columns:1fr;grid-template-rows:auto auto}
+  aside{order:2;border-right:0;border-top:1px solid var(--line)}
+  .pane{max-height:none;overflow:visible}
+  #stage{min-height:0}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+@media print{
+  @page{size:A4;margin:0}
+  html,body{height:auto;background:#fff}
+  #app,.pm-head,#toast{display:none!important}
+  #printModal{position:static;background:#fff;overflow:visible;display:block}
+  #printRoot{display:block;padding:0}
+  .sheet{box-shadow:none;page-break-after:always;break-after:page}
+  .ptile img{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+</style>
+</head>
+<body>
+<div id="app">
+  <header class="bar">
+    <div class="brand"><span class="mark" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>Binderplaner</div>
+    <div class="seg" role="tablist" aria-label="Bereich">
+      <button role="tab" data-view="binder" aria-selected="true">Binder</button>
+      <button role="tab" data-view="masters" aria-selected="false">Mastersets</button>
+    </div>
+    <input id="binderName" class="bonly" type="text" aria-label="Name des Binders">
+    <div class="grow"></div>
+    <button class="btn" id="menuBtn" aria-expanded="false" aria-label="Einstellungen">⋯</button>
+    <label class="ctl bonly hctl">Raster
+      <select id="grid">
+        <option value="2x2">4er · 2×2</option>
+        <option value="3x3">9er · 3×3</option>
+        <option value="4x3">12er · 4×3</option>
+        <option value="4x4">16er · 4×4</option>
+      </select>
+    </label>
+    <div class="ctl bonly hctl">Doppelseiten
+      <div class="stepper"><button id="spMinus" aria-label="Doppelseite entfernen">−</button><span id="spCount">4</span><button id="spPlus" aria-label="Doppelseite hinzufügen">+</button></div>
+    </div>
+    <label class="ctl bonly hctl"><input type="checkbox" id="dimMissing"> Fehlende ausgrauen</label>
+    <button class="btn hctl" id="exportBtn">Export</button>
+    <button class="btn hctl" id="importBtn">Import</button>
+    <input type="file" id="importFile" accept=".json,application/json" hidden>
+    <button class="btn primary bonly hctl" id="printBtn">Druckbogen</button>
+  </header>
+  <section id="mastersView" hidden>
+    <aside class="ms-side">
+      <div class="pane" style="gap:14px">
+        <div>
+          <label class="lbl" for="msAddSel">Set hinzufügen</label>
+          <div class="row" style="margin-top:6px"><select id="msAddSel" class="full"><option value="">Set wählen …</option></select><button class="btn small primary" id="msAddBtn">Tracken</button></div>
+        </div>
+        <div id="msList" class="ms-list"></div>
+        <fieldset>
+          <legend>Preise</legend>
+          <label class="lbl" for="msPriceRef">Referenzpreis</label>
+          <select id="msPriceRef" class="full">
+            <option value="low">Günstigster Preis (ab)</option>
+            <option value="avg">Durchschnitt (aktuell)</option>
+            <option value="avg7">Durchschnitt 7 Tage</option>
+            <option value="avg30">Durchschnitt 30 Tage</option>
+            <option value="trend">Preistrend</option>
+          </select>
+          <label class="lbl" for="msCmLang">Sprache auf Cardmarket</label>
+          <select id="msCmLang" class="full"></select>
+          <p class="hint">Alle Preise in Euro aus der Preisübersicht von Cardmarket (täglich aktualisiert, abgerufen über TCGdex). Cardmarket führt diese Werte für alle Sprachen zusammen. Die Sprachwahl filtert die Angebote, wenn du eine Karte über den Link auf Cardmarket öffnest.</p>
+        </fieldset>
+      </div>
+    </aside>
+    <div class="ms-main" id="msMain"></div>
+  </section>
+  <main id="binderView">
+    <aside>
+      <div class="tabs" role="tablist">
+        <button role="tab" aria-selected="true" data-tab="cards">Karten</button>
+        <button role="tab" aria-selected="false" data-tab="arts">Artworks</button>
+        <button role="tab" aria-selected="false" data-tab="list">Liste</button>
+      </div>
+
+      <section class="pane" id="pane-cards">
+        <form id="searchForm" style="display:flex;flex-direction:column;gap:8px">
+          <div class="row"><label class="lbl" for="q" style="width:62px">Pokémon</label><input type="text" id="q" placeholder="z. B. Glurak" autocomplete="off"></div>
+          <div class="row"><label class="lbl" for="artist" style="width:62px">Artist</label><input type="text" id="artist" list="artistList" placeholder="z. B. Mitsuhiro Arita" autocomplete="off"><datalist id="artistList"></datalist></div>
+          <div class="row"><label class="lbl" for="setSel" style="width:62px">Set</label>
+            <select id="setSel" class="full"><option value="">Alle Sets</option></select>
+            <select id="langSel" class="full" style="flex:0 0 auto" aria-label="Sprache"></select>
+          </div>
+          <div class="row"><label class="lbl" for="raritySel" style="width:62px">Selten&shy;heit</label>
+            <select id="raritySel" class="full"><option value="">Alle Seltenheiten</option></select>
+          </div>
+          <div class="row"><button class="btn primary" type="submit" style="flex:1;justify-content:center">Suchen</button><button class="btn" type="button" id="resetSearch">Zurücksetzen</button></div>
+        </form>
+        <div class="target" id="target"></div>
+        <div class="status" id="searchStatus"></div>
+        <p class="hint">Karte anklicken setzt sie ins <b>markierte Feld</b> (danach springt die Markierung weiter). Oder per Drag &amp; Drop auf ein Feld ziehen. Felder lassen sich untereinander tauschen.</p>
+        <div id="results"></div>
+        <button class="btn" id="moreBtn" hidden style="justify-content:center">Weitere Treffer laden</button>
+        <fieldset>
+          <legend>Eigenes Kartenbild</legend>
+          <div class="row"><input type="url" id="customUrl" placeholder="Bild-URL einer Karte"><button class="btn small" id="customUrlBtn">Einsetzen</button></div>
+          <div class="row"><button class="btn small" id="customFileBtn">Datei wählen …</button><span class="hint">für Proxys, Promos, Scans</span></div>
+          <input type="file" id="customFile" accept="image/*" hidden>
+        </fieldset>
+        <p class="hint">Kartendaten und Bilder: TCGdex (api.tcgdex.net). Nicht jede Sprache hat Bilder für jedes Set; ggf. auf English wechseln. Die Schnellfilter für Seltenheiten greifen bei englischen Seltenheitsnamen; findet ein Schnellfilter in einer anderen Sprache nichts, die exakte Seltenheit aus der Liste wählen.</p>
+      </section>
+
+      <section class="pane" id="pane-arts" hidden>
+        <div id="pickbar" class="pickbar" hidden><span>Ziehe im Binder über die Felder, die das Artwork füllen soll.</span><button class="btn small" id="pickCancel">Abbrechen</button></div>
+        <p class="hint"><b>Michi-Methode:</b> Ein großes Artwork wird auf mehrere Taschen verteilt, in Kartengröße (63 × 88 mm) gedruckt, zugeschnitten und in die Hüllen gesteckt. Taschenabstand und Buchrücken werden eingerechnet, damit das Motiv über die Lücken hinweg weiterläuft.</p>
+        <div class="drop" id="artDrop">Bild hierher ziehen oder <button class="btn small" id="artFileBtn">Datei wählen …</button></div>
+        <input type="file" id="artFile" accept="image/*" multiple hidden>
+        <div class="row"><input type="url" id="artUrl" placeholder="oder Bild-URL einfügen"><button class="btn small" id="artUrlBtn">Hinzufügen</button></div>
+        <div id="artList" style="display:flex;flex-direction:column;gap:10px"></div>
+        <fieldset>
+          <legend>Binder-Maße</legend>
+          <div class="sl"><span>Taschen­abstand</span><input type="range" id="gap" min="0" max="10" step="0.5"><output id="gapOut"></output></div>
+          <div class="sl"><span>Buchrücken</span><input type="range" id="spine" min="16" max="60" step="1"><output id="spineOut"></output></div>
+          <p class="hint">Abstand zwischen zwei Taschen bzw. zwischen der innersten Tasche links und rechts (in mm). Am besten am eigenen Binder nachmessen.</p>
+        </fieldset>
+      </section>
+
+      <section class="pane" id="pane-list" hidden>
+        <div class="stats" id="stats"></div>
+        <div class="row"><button class="btn small" id="copyList">Liste kopieren</button><span class="hint">Klick auf ✓ im Feld markiert eine Karte als vorhanden.</span></div>
+        <div style="overflow-x:auto"><table id="listTable"></table></div>
+      </section>
+    </aside>
+
+    <div class="stagewrap">
+      <div class="nav">
+        <button class="btn" id="prevSp" aria-label="Vorherige Doppelseite">◀</button>
+        <div style="text-align:center"><h2 id="spTitle">Seiten 1–2</h2><div class="sub" id="spSub"></div></div>
+        <button class="btn" id="nextSp" aria-label="Nächste Doppelseite">▶</button>
+      </div>
+      <div id="stagePick" class="pickbar" hidden style="margin:8px 16px 0;position:static"><span>Ziehe über die Felder für das Artwork</span><button class="btn small" id="stagePickCancel">Abbrechen</button></div>
+      <div id="stage"><div id="spread"></div></div>
+      <div id="strip"></div>
+    </div>
+  </main>
+</div>
+
+<nav id="mnav" aria-label="Navigation">
+  <button data-m="binder" aria-current="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M12 4v16M7.5 8h1M7.5 12h1M7.5 16h1M15.5 8h1M15.5 12h1M15.5 16h1"/></svg>Binder</button>
+  <button data-m="cards"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="10.5" cy="10.5" r="6"/><path d="m15 15 5 5"/></svg>Suche</button>
+  <button data-m="arts"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="m3 16 5-5 4 4 3-3 6 6"/><circle cx="15.5" cy="8.5" r="1.5"/></svg>Artworks</button>
+  <button data-m="list"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 6h11M9 12h11M9 18h11"/><circle cx="4.5" cy="6" r="1"/><circle cx="4.5" cy="12" r="1"/><circle cx="4.5" cy="18" r="1"/></svg>Liste</button>
+  <button data-m="masters"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="m8 12 3 3 5-6"/></svg>Mastersets</button>
+</nav>
+
+<div id="printModal" hidden>
+  <div class="pm-head">
+    <h3>Druckbogen · A4, Kacheln 63 × 88 mm</h3>
+    <label class="ctl"><input type="checkbox" id="skipCards"> Felder mit Karte auslassen</label>
+    <label class="ctl"><input type="checkbox" id="cutLines"> Schnittlinien</label>
+    <button class="btn primary" id="doPrint">Drucken</button>
+    <button class="btn" id="closePrint">Schließen</button>
+  </div>
+  <div id="printRoot"></div>
+</div>
+<div id="toast" role="status"></div>
+
+<script>
+const $ = s => document.querySelector(s);
+const CW = 63, CH = 88, PAD = 6;
+const API = 'https://api.tcgdex.net/v2/';
+const LANGS = {de:'DE',en:'EN',fr:'FR',it:'IT',es:'ES',pt:'PT',ja:'JA'};
+let S, u = 3, sel = null, activeArt = null, pick = null, setsCache = {}, results = [];
+const blobCache = new Map();
+
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const uid = () => Math.random().toString(36).slice(2, 10);
+function toast(msg){ const t=$('#toast'); t.textContent=msg; t.classList.add('show'); clearTimeout(toast._t); toast._t=setTimeout(()=>t.classList.remove('show'),2400); }
+
+/* ---------- storage (IndexedDB, Fallback localStorage) ---------- */
+const store = {
+  db: null,
+  async open(){ if(this.db) return this.db; this.db = await new Promise((res,rej)=>{ const r=indexedDB.open('binderplaner',1); r.onupgradeneeded=()=>r.result.createObjectStore('kv'); r.onsuccess=()=>res(r.result); r.onerror=()=>rej(r.error); }); return this.db; },
+  async get(k){ try{ const db=await this.open(); return await new Promise((res,rej)=>{ const q=db.transaction('kv').objectStore('kv').get(k); q.onsuccess=()=>res(q.result); q.onerror=()=>rej(q.error); }); }catch(e){ try{ return JSON.parse(localStorage.getItem('bp_'+k)); }catch(_){ return null; } } },
+  async set(k,v){ try{ const db=await this.open(); await new Promise((res,rej)=>{ const tx=db.transaction('kv','readwrite'); tx.objectStore('kv').put(v,k); tx.oncomplete=res; tx.onerror=()=>rej(tx.error); }); }catch(e){ try{ localStorage.setItem('bp_'+k, JSON.stringify(v)); }catch(_){ if(!store.warned){ store.warned=true; toast('Speichern nicht möglich – bitte Export nutzen'); } } } }
+};
+let saveT; function save(){ clearTimeout(saveT); saveT=setTimeout(()=>store.set('state', S), 400); }
+function commit(){ save(); renderAll(); }
+
+/* ---------- state ---------- */
+function newPage(){ return {slots: Array(S.cols*S.rows).fill(null)}; }
+function defaultState(){
+  S = {v:1, name:'Mein Binder', cols:3, rows:3, gap:3, spine:30, lang:'de', pages:[], arts:[], spread:0, dimMissing:false, skipCards:false, cutLines:true};
+  for(let i=0;i<8;i++) S.pages.push(newPage());
+  const demo = demoArt();
+  S.arts.push({id:uid(), name:'Beispiel: Abendlandschaft', src:demo, iw:1800, ih:900, spread:0, x:0, y:0, w:6, h:3, zoom:1, panX:.5, panY:.5});
+}
+function demoArt(){
+  const c=document.createElement('canvas'); c.width=1800; c.height=900; const g=c.getContext('2d');
+  const sky=g.createLinearGradient(0,0,0,900); sky.addColorStop(0,'#1b1f4a'); sky.addColorStop(.55,'#c4547a'); sky.addColorStop(.8,'#f4a259'); g.fillStyle=sky; g.fillRect(0,0,1800,900);
+  let seed=7; const rnd=()=>(seed=(seed*9301+49297)%233280)/233280;
+  g.fillStyle='rgba(255,255,255,.8)'; for(let i=0;i<140;i++){ const r=rnd()*1.8+.4; g.beginPath(); g.arc(rnd()*1800, rnd()*360, r, 0, 7); g.fill(); }
+  g.fillStyle='#ffe2a8'; g.beginPath(); g.arc(1180,560,110,0,7); g.fill();
+  const layers=[['#6b3a6e',520,90],['#4a2a5c',600,120],['#2c1d43',690,150],['#170f29',780,110]];
+  layers.forEach(([col,base,amp],li)=>{ g.fillStyle=col; g.beginPath(); g.moveTo(0,900); for(let x=0;x<=1800;x+=30){ const y=base-Math.abs(Math.sin(x/(170+li*60)+li*2))*amp-rnd()*18; g.lineTo(x,y); } g.lineTo(1800,900); g.closePath(); g.fill(); });
+  return c.toDataURL('image/jpeg', .88);
+}
+function normalize(){
+  const n=S.cols*S.rows;
+  S.pages.forEach(p=>{ p.slots=(p.slots||[]).slice(0,n); while(p.slots.length<n) p.slots.push(null); });
+  if(S.pages.length%2) S.pages.push(newPage());
+  if(S.pages.length<2) S.pages.push(newPage(),newPage());
+  S.spread=Math.min(Math.max(0,S.spread|0), S.pages.length/2-1);
+}
+
+/* ---------- geometry (mm) ---------- */
+const nSpreads = () => S.pages.length/2;
+function colX(gc){ const side=gc>=S.cols?1:0, c=gc-side*S.cols; return side*(S.cols*(CW+S.gap)-S.gap+S.spine) + c*(CW+S.gap); }
+const rowY = r => r*(CH+S.gap);
+function tileGeom(a, gc, r){
+  const x0=colX(a.x), y0=rowY(a.y);
+  const RW=colX(a.x+a.w-1)+CW-x0, RH=rowY(a.y+a.h-1)+CH-y0;
+  const s=Math.max(RW/a.iw, RH/a.ih)*a.zoom, DW=a.iw*s, DH=a.ih*s;
+  const ox=(RW-DW)*a.panX, oy=(RH-DH)*a.panY;
+  return {w:DW, h:DH, l:ox-(colX(gc)-x0), t:oy-(rowY(r)-y0)};
+}
+const covers = (a,sp,gc,r) => a.spread===sp && gc>=a.x && gc<a.x+a.w && r>=a.y && r<a.y+a.h;
+function topArtAt(sp,gc,r){ for(let k=S.arts.length-1;k>=0;k--) if(covers(S.arts[k],sp,gc,r)) return S.arts[k]; return null; }
+function artSrc(a){
+  if(!a.src.startsWith('data:')) return a.src;
+  if(blobCache.has(a.id)) return blobCache.get(a.id);
+  try{ const [h,b]=a.src.split(','); const mime=h.match(/data:([^;]+)/)[1]; const bin=atob(b); const arr=new Uint8Array(bin.length); for(let i=0;i<bin.length;i++) arr[i]=bin.charCodeAt(i); const url=URL.createObjectURL(new Blob([arr],{type:mime})); blobCache.set(a.id,url); return url; }catch(e){ return a.src; }
+}
+const cardSrc = (c,q='high') => c.custom ? c.img : `${c.img}/${q}.webp`;
+
+/* ---------- render: spread ---------- */
+let phoneSide=0;
+const isPhone=()=>matchMedia('(max-width:700px)').matches;
+function layout(){
+  const st=$('#stage'); const W=st.clientWidth-24; const H=st.clientHeight-24;
+  const pageW=2*PAD+S.cols*CW+(S.cols-1)*S.gap, pageH=2*PAD+S.rows*CH+(S.rows-1)*S.gap;
+  const spineVis=Math.max(4,S.spine-2*PAD);
+  if(isPhone()){ // eine Seite pro Bildschirm
+    const avail=window.innerHeight-$('#app>header').offsetHeight-190;
+    u=Math.max(1.2,Math.min((st.clientWidth-8)/pageW, Math.max(220,avail)/pageH));
+    return {pageW,pageH,spineVis,stacked:false,single:true};
+  }
+  const stacked = W < 640;
+  const sw = stacked ? pageW : 2*pageW+spineVis, sh = stacked ? 2*pageH+spineVis : pageH;
+  u = stacked ? W/sw : Math.min(W/sw, H>200 ? H/sh : Infinity);
+  u = Math.max(u, 1.2);
+  return {pageW,pageH,spineVis,stacked};
+}
+function renderSpread(){
+  const L=layout(); const sp=$('#spread'); sp.classList.toggle('stacked',L.stacked);
+  const pages=[S.spread*2, S.spread*2+1];
+  const sides=L.single?[phoneSide]:[0,1];
+  let html='';
+  sides.forEach(side=>{
+    const p=pages[side];
+    if(side===1&&!L.single) html+=`<div class="spine" style="${L.stacked?`height:${L.spineVis*u}px`:`width:${L.spineVis*u}px`}"></div>`;
+    html+=`<div class="page" data-label="Seite ${p+1}" style="width:${L.pageW*u}px;height:${L.pageH*u}px;padding:${PAD*u}px;gap:${S.gap*u}px;grid-template-columns:repeat(${S.cols},${CW*u}px);grid-auto-rows:${CH*u}px">`;
+    S.pages[p].slots.forEach((card,i)=>{
+      const c=i%S.cols, r=Math.floor(i/S.cols), gc=c+side*S.cols;
+      let cls='slot', layers='';
+      S.arts.forEach(a=>{ if(!covers(a,S.spread,gc,r)) return; const g=tileGeom(a,gc,r);
+        layers+=`<img class="tile" src="${esc(artSrc(a))}" alt="" draggable="false" style="width:${g.w*u}px;height:${g.h*u}px;left:${g.l*u}px;top:${g.t*u}px">`;
+        if(a.id===activeArt) cls+=' art-active'; });
+      if(sel && sel.p===p && sel.i===i) cls+=' sel';
+      if(pick && pick.start && inPick(gc,r)) cls+=' picking';
+      if(card && S.dimMissing && !card.owned) cls+=' missing';
+      html+=`<div class="${cls}" data-p="${p}" data-i="${i}" data-gc="${gc}" data-r="${r}" ${card&&!pick?'draggable="true"':''}>`+
+        (layers||card?'':`<span class="num">${i+1}</span>`)+layers+
+        (card?`<img class="card" src="${esc(cardSrc(card,u*CW>150?'high':'low'))}" alt="${esc(card.name)}" draggable="false" loading="lazy">`+
+          `<div class="acts"><button data-act="own" class="${card.owned?'on':''}" title="${card.owned?'Vorhanden':'Als vorhanden markieren'}">✓</button><button data-act="del" title="Karte entfernen">✕</button></div>`+
+          (card.localId?`<span class="badge">${esc(card.localId)}</span>`:''):'')+
+        `</div>`;
+    });
+    html+=`</div>`;
+  });
+  sp.innerHTML=html;
+  const shown=sides.map(s=>pages[s]);
+  $('#spTitle').textContent=L.single?`Seite ${shown[0]+1}`:`Seiten ${pages[0]+1}–${pages[1]+1}`;
+  const filled=shown.reduce((n,p)=>n+S.pages[p].slots.filter(Boolean).length,0);
+  $('#spSub').textContent=`${filled} von ${shown.length*S.cols*S.rows} Taschen mit Karten · ${L.single?`Seite ${shown[0]+1}/${S.pages.length}`:`Doppelseite ${S.spread+1}/${nSpreads()}`}`;
+  const idx=S.spread*2+(L.single?phoneSide:0);
+  $('#prevSp').disabled=L.single?idx===0:S.spread===0;
+  $('#nextSp').disabled=L.single?idx>=S.pages.length-1:S.spread>=nSpreads()-1;
+  $('#stage').classList.toggle('pickmode',!!pick);
+  $('#stagePick').hidden=!pick;
+  updateTarget();
+}
+function updateTarget(){
+  const t=$('#target'); if(!t) return;
+  t.innerHTML = sel ? `Nächste Karte kommt auf <b>Seite ${sel.p+1} · Feld ${sel.i+1}</b>` : 'Kein Feld markiert: die Karte kommt ins erste freie Feld der aktuellen Doppelseite.';
+}
+function stepPage(d){
+  if(isPhone()){ const idx=S.spread*2+phoneSide+d; if(idx<0||idx>=S.pages.length) return; S.spread=idx>>1; phoneSide=idx%2; }
+  else { const s=S.spread+d; if(s<0||s>=nSpreads()) return; S.spread=s; }
+  sel=null; commit();
+}
+function renderStrip(){
+  let h='';
+  for(let s=0;s<nSpreads();s++){
+    const n=S.pages[2*s].slots.filter(Boolean).length+S.pages[2*s+1].slots.filter(Boolean).length;
+    const arts=S.arts.filter(a=>a.spread===s).length;
+    h+=`<button data-sp="${s}" aria-current="${s===S.spread}">${2*s+1}–${2*s+2}<small>${n} Karten${arts?' · '+arts+' Art':''}</small></button>`;
+  }
+  $('#strip').innerHTML=h;
+}
+
+/* ---------- render: artworks ---------- */
+function artLabel(a){
+  const l=a.x<S.cols, r=a.x+a.w>S.cols; const p=a.spread*2;
+  const pg = l&&r ? `Seiten ${p+1}–${p+2}` : l ? `Seite ${p+1}` : `Seite ${p+2}`;
+  return `${pg} · ${a.w}×${a.h} Felder · ${a.w*a.h} Kacheln`;
+}
+function renderArts(){
+  $('#pickbar').hidden=!pick;
+  if(!S.arts.length){ $('#artList').innerHTML='<p class="hint">Noch keine Artworks. Lade ein Bild hoch oder füge eine URL ein.</p>'; return; }
+  $('#artList').innerHTML=S.arts.map((a,k)=>{
+    const act=a.id===activeArt;
+    return `<div class="art${act?' active':''}" data-id="${a.id}">
+      <div class="art-head" data-act="select"><img src="${esc(artSrc(a))}" alt=""><div><b>${esc(a.name)}</b><small>${artLabel(a)}</small></div></div>
+      ${act?`
+      <input type="text" data-field="name" value="${esc(a.name)}" aria-label="Name">
+      <div class="row"><button class="btn small" data-act="pick">Bereich ziehen</button><button class="btn small" data-act="left">Linke Seite</button><button class="btn small" data-act="right">Rechte Seite</button><button class="btn small" data-act="both">Doppelseite</button></div>
+      <div class="sl"><span>Zoom</span><input type="range" min="1" max="3" step="0.01" data-field="zoom" value="${a.zoom}"><output>${Math.round(a.zoom*100)}%</output></div>
+      <div class="sl"><span>Horizontal</span><input type="range" min="0" max="1" step="0.005" data-field="panX" value="${a.panX}"><output>${Math.round(a.panX*100)}</output></div>
+      <div class="sl"><span>Vertikal</span><input type="range" min="0" max="1" step="0.005" data-field="panY" value="${a.panY}"><output>${Math.round(a.panY*100)}</output></div>
+      <div class="row"><button class="btn small" data-act="front" ${k===S.arts.length-1?'disabled':''}>Nach vorne</button><button class="btn small" data-act="dup">Duplizieren</button><button class="btn small" data-act="remove" style="margin-left:auto;color:var(--warn)">Entfernen</button></div>`:''}
+    </div>`;
+  }).join('');
+}
+
+/* ---------- render: list ---------- */
+function allCards(){ const out=[]; S.pages.forEach((p,pi)=>p.slots.forEach((c,i)=>{ if(c) out.push({p:pi,i,c}); })); return out; }
+function renderList(){
+  const cards=allCards(), have=cards.filter(x=>x.c.owned).length, tiles=S.arts.reduce((n,a)=>n+a.w*a.h,0);
+  $('#stats').innerHTML=`<div><b>${cards.length}</b><small>Karten geplant</small></div><div><b>${have}</b><small>vorhanden</small></div><div><b>${cards.length-have}</b><small>fehlen</small></div><div><b>${tiles}</b><small>Art-Kacheln</small></div>`;
+  $('#listTable').innerHTML = cards.length ? `<tr><th>Seite</th><th>Feld</th><th>Karte</th><th>Set</th><th>Nr.</th><th>Artist</th><th>Seltenheit</th><th></th></tr>`+
+    cards.map(x=>`<tr><td class="mono">${x.p+1}</td><td class="mono">${x.i+1}</td><td>${esc(x.c.name)}</td><td>${esc(x.c.setName||'–')}</td><td class="mono">${esc(x.c.localId||'–')}</td><td>${esc(x.c.artist||'–')}</td><td>${esc(x.c.rarity||'–')}</td><td><span class="pill ${x.c.owned?'have':'need'}">${x.c.owned?'hab ich':'fehlt'}</span></td></tr>`).join('')
+    : `<tr><td class="hint">Noch keine Karten im Binder.</td></tr>`;
+}
+function renderHeader(){
+  $('#binderName').value=S.name; $('#grid').value=`${S.cols}x${S.rows}`; $('#spCount').textContent=nSpreads();
+  $('#dimMissing').checked=S.dimMissing; $('#gap').value=S.gap; $('#gapOut').textContent=S.gap+' mm'; $('#spine').value=S.spine; $('#spineOut').textContent=S.spine+' mm';
+}
+function renderAll(){ renderHeader(); renderSpread(); renderStrip(); renderArts(); renderList(); }
+
+/* ---------- card search (TCGdex) ---------- */
+async function api(path){ const r=await fetch(API+S.lang+path); if(!r.ok) throw new Error('HTTP '+r.status); return r.json(); }
+async function loadSets(){
+  const sel=$('#setSel'); const cur=sel.value;
+  try{
+    if(!setsCache[S.lang]) setsCache[S.lang]=await api('/sets');
+    const sets=[...setsCache[S.lang]].reverse();
+    sel.innerHTML='<option value="">Alle Sets</option>'+sets.map(s=>`<option value="${esc(s.id)}">${esc(s.name)} · ${esc(s.id)}${s.cardCount?.total?` (${s.cardCount.total})`:''}</option>`).join('');
+    sel.value=cur;
+    const ms=$('#msAddSel'), mcur=ms.value;
+    ms.innerHTML='<option value="">Set wählen …</option>'+sets.map(s=>`<option value="${esc(s.id)}">${esc(s.name)} · ${esc(s.id)}</option>`).join('');
+    ms.value=mcur;
+  }catch(e){ status('Sets konnten nicht geladen werden. Besteht eine Internetverbindung?',true); }
+}
+function setNameOf(id){ const sid=id.slice(0,id.lastIndexOf('-')); const s=(setsCache[S.lang]||[]).find(x=>x.id===sid); return s?s.name:sid; }
+function status(msg,err){ const s=$('#searchStatus'); s.textContent=msg; s.classList.toggle('err',!!err); }
+async function loadArtists(){
+  try{ const list=await api('/illustrators'); $('#artistList').innerHTML=list.filter(Boolean).sort((a,b)=>a.localeCompare(b)).map(n=>`<option value="${esc(n)}"></option>`).join(''); }catch(e){}
+}
+// Schnellfilter: Teilwort-Suche in der Seltenheit (greift bei englischen Seltenheitsnamen)
+const RARITY_PRESETS=[['holo','Holo (alle Holo-Seltenheiten)'],['rare','Rare (alles ab Rare)'],['illustration','Illustration Rare + Special Illustration Rare'],['special illustration','Special Illustration Rare'],['full art','Full Art'],['ultra','Ultra Rare'],['double','Double Rare'],['secret','Secret Rare'],['hyper','Hyper Rare / Gold'],['shiny','Shiny'],['radiant','Radiant'],['amazing','Amazing Rare'],['ace spec','ACE SPEC'],['promo','Promo']];
+async function loadRarities(){
+  const sel=$('#raritySel'), cur=sel.value; let exact='';
+  try{ const list=await api('/rarities'); exact=list.filter(Boolean).filter(r=>r.toLowerCase()!=='none').map(r=>`<option value="eq:${esc(r)}">${esc(r)}</option>`).join(''); }catch(e){}
+  sel.innerHTML='<option value="">Alle Seltenheiten</option>'+
+    `<optgroup label="Schnellfilter">${RARITY_PRESETS.map(([v,l])=>`<option value="${esc(v)}">${esc(l)}</option>`).join('')}</optgroup>`+
+    (exact?`<optgroup label="Exakte Seltenheit (${LANGS[S.lang]})">${exact}</optgroup>`:'');
+  sel.value=cur; if(sel.value!==cur) sel.value='';
+}
+const rarityLabel=v=>v.startsWith('eq:')?v.slice(3):(RARITY_PRESETS.find(p=>p[0]===v)||[,v])[1];
+const PER_PAGE=250; let lastSearch=null, lastMissing=0;
+// Kombinierbar: Pokémon-Name, Artist und Set. Nur Set (+Name) → Set-Endpunkt; sobald ein Artist dabei ist → Karten-Filter der API, Set wird lokal gefiltert.
+async function search(more){
+  const q=$('#q').value.trim(), artist=$('#artist').value.trim(), set=$('#setSel').value, rarity=$('#raritySel').value;
+  if(!q && !set && !artist && !rarity){ status('Gib einen Pokémon-Namen oder Artist ein oder wähle ein Set bzw. eine Seltenheit.'); return; }
+  if(!more){ lastSearch={q,artist,set,rarity,page:1}; results=[]; lastMissing=0; } else lastSearch.page++;
+  const L=lastSearch; status('Suche läuft …'); $('#moreBtn').hidden=true;
+  try{
+    let cards, setName=null, hasMore=false;
+    if(L.set && !L.artist && !L.rarity){
+      const d=await api('/sets/'+encodeURIComponent(L.set)); cards=d.cards||[]; setName=d.name;
+      if(L.q){ const n=L.q.toLowerCase(); cards=cards.filter(c=>c.name.toLowerCase().includes(n)); }
+    } else {
+      const fetchPage=async page=>{ const p=new URLSearchParams();
+        if(L.q) p.set('name',L.q);
+        if(L.artist) p.set('illustrator',L.artist);
+        if(L.rarity) p.set('rarity',L.rarity);
+        p.set('pagination:page',page); p.set('pagination:itemsPerPage',PER_PAGE);
+        return api('/cards?'+p.toString().replace(/%3A/g,':')); };
+      if(L.set){
+        // Set lokal filtern: alle Seiten durchgehen (max. 20), damit keine Karten des Sets fehlen
+        cards=[]; for(let pg=1;pg<=20;pg++){ status(`Suche läuft … (Seite ${pg})`); const part=await fetchPage(pg); cards.push(...part); if(part.length<PER_PAGE) break; }
+        cards=cards.filter(c=>c.id.startsWith(L.set+'-'));
+      } else {
+        cards=await fetchPage(L.page); hasMore=cards.length===PER_PAGE;
+      }
+    }
+    const withImg=cards.filter(c=>c.image);
+    results=results.concat(withImg.map(c=>({id:c.id, name:c.name, localId:c.localId, img:c.image, setName:setName||setNameOf(c.id), artist:L.artist||undefined, rarity:L.rarity?rarityLabel(L.rarity):undefined})));
+    lastMissing+=cards.length-withImg.length;
+    const what=[L.q&&`„${L.q}“`, L.artist&&`Artist ${L.artist}`, L.set&&(setName||setNameOf(L.set+'-x')), L.rarity&&rarityLabel(L.rarity)].filter(Boolean).join(' · ');
+    status(results.length ? `${results.length} Karten für ${what}${lastMissing?` · ${lastMissing} ohne Bild in dieser Sprache`:''}` : (lastMissing?'Treffer haben in dieser Sprache keine Bilder. Versuch es auf English.':`Keine Treffer für ${what}.`));
+    $('#moreBtn').hidden=!hasMore;
+    renderResults();
+  }catch(e){ status('Suche fehlgeschlagen ('+e.message+'). Prüfe die Internetverbindung.',true); }
+}
+function renderResults(){
+  $('#results').innerHTML=results.map((c,k)=>`<button class="res" data-k="${k}" draggable="true" title="${esc(c.name)} · ${esc(c.setName)} ${esc(c.localId)}"><div class="ph"><img src="${esc(c.img)}/low.webp" alt="${esc(c.name)}" loading="lazy" draggable="false"></div><span><b>${esc(c.name)}</b>${esc(c.setName)} · <span class="mono">${esc(c.localId)}</span></span></button>`).join('');
+}
+
+/* ---------- placing ---------- */
+function placeCard(card, p, i){
+  S.pages[p].slots[i]={...card, owned:S.pages[p].slots[i]?.id===card.id ? S.pages[p].slots[i].owned : false};
+  if(isPhone()&&document.body.dataset.m!=='binder') toast(`${card.name} → Seite ${p+1} · Feld ${i+1}`);
+  sel=nextEmpty(p,i); commit();
+}
+function nextEmpty(p,i){
+  const n=S.cols*S.rows;
+  for(let k=p*n+i+1;k<S.pages.length*n;k++){ const pp=Math.floor(k/n), ii=k%n; if(!S.pages[pp].slots[ii]){ S.spread=Math.floor(pp/2); phoneSide=pp%2; return {p:pp,i:ii}; } }
+  return null;
+}
+function placeAtSelection(card){
+  if(!sel){ const n=S.cols*S.rows; const order=isPhone()?[S.spread*2+phoneSide,S.spread*2+1-phoneSide]:[S.spread*2,S.spread*2+1]; for(const p of order) for(let i=0;i<n;i++) if(!S.pages[p].slots[i]){ sel={p,i}; break; } if(!sel){ toast('Markiere zuerst ein Feld'); return; } }
+  placeCard(card, sel.p, sel.i);
+}
+
+/* ---------- artwork ---------- */
+function readFile(f){ return new Promise((res,rej)=>{ const r=new FileReader(); r.onload=()=>res(r.result); r.onerror=rej; r.readAsDataURL(f); }); }
+function imgSize(src){ return new Promise((res,rej)=>{ const im=new Image(); im.onload=()=>res([im.naturalWidth,im.naturalHeight]); im.onerror=()=>rej(new Error('Bild konnte nicht geladen werden')); im.src=src; }); }
+async function addArt(src,name){
+  try{
+    const [iw,ih]=await imgSize(src);
+    const a={id:uid(), name:name||'Artwork', src, iw, ih, spread:S.spread, x:S.cols, y:0, w:S.cols, h:S.rows, zoom:1, panX:.5, panY:.5};
+    S.arts.push(a); activeArt=a.id; switchTab('arts'); commit(); toast('Artwork liegt auf der rechten Seite – Bereich anpassen');
+  }catch(e){ toast(e.message); }
+}
+async function addArtFiles(files){ for(const f of files){ if(!f.type.startsWith('image/')) continue; await addArt(await readFile(f), f.name.replace(/\.[^.]+$/,'')); } }
+const getArt = id => S.arts.find(a=>a.id===id);
+function inPick(gc,r){ const a=pick.start,b=pick.end||pick.start; return gc>=Math.min(a.gc,b.gc)&&gc<=Math.max(a.gc,b.gc)&&r>=Math.min(a.r,b.r)&&r<=Math.max(a.r,b.r); }
+function finishPick(){
+  const a=getArt(pick.artId), s=pick.start, e=pick.end||s;
+  if(a){ a.spread=S.spread; a.x=Math.min(s.gc,e.gc); a.y=Math.min(s.r,e.r); a.w=Math.abs(s.gc-e.gc)+1; a.h=Math.abs(s.r-e.r)+1; }
+  pick=null; commit();
+  if(isPhone()) showM('arts');
+}
+
+/* ---------- print ---------- */
+function buildPrint(){
+  const tiles=[];
+  S.arts.forEach(a=>{ for(let r=a.y;r<a.y+a.h;r++) for(let gc=a.x;gc<a.x+a.w;gc++){
+    const side=gc>=S.cols?1:0, p=a.spread*2+side, i=r*S.cols+(gc-side*S.cols);
+    if(!S.pages[p]) continue;
+    if(topArtAt(a.spread,gc,r)!==a) continue;
+    if(S.skipCards && S.pages[p].slots[i]) continue;
+    tiles.push({a,gc,r,label:`S${p+1}·F${i+1}`});
+  }});
+  const root=$('#printRoot'); root.classList.toggle('cut',S.cutLines);
+  if(!tiles.length){ root.innerHTML='<p class="empty-print">Keine Kacheln zu drucken. Lege im Tab „Artworks“ ein Bild über Felder.</p>'; return; }
+  const sheets=[]; for(let k=0;k<tiles.length;k+=9) sheets.push(tiles.slice(k,k+9));
+  root.innerHTML=sheets.map((sh,n)=>`<section class="sheet"><header><span>${esc(S.name)} · Michi-Kacheln 63 × 88 mm</span><span>Bogen ${n+1}/${sheets.length}</span></header>
+    <div class="sgrid">${sh.map(t=>{ const g=tileGeom(t.a,t.gc,t.r); return `<div class="ptile"><img src="${esc(artSrc(t.a))}" alt="" style="width:${g.w}mm;height:${g.h}mm;left:${g.l}mm;top:${g.t}mm"></div>`; }).join('')}</div>
+    <footer>Reihenfolge (links→rechts, oben→unten): ${sh.map(t=>`${t.label} [${esc(t.a.name)}]`).join(' · ')}<br>S = Binderseite, F = Feld (Taschen von links oben gezählt). Druck auf 100 % / „Tatsächliche Größe“.</footer></section>`).join('');
+}
+
+/* ---------- Mastersets ---------- */
+let M = {sets:{}, order:[], active:null, priceRef:'low', cmLang:'de', view:'binder'};
+const msData = {}; let msLoading=null, msFilter='all', msQuery='', msSort='num';
+const CM_LANG={de:[3,'Deutsch'],en:[1,'Englisch'],fr:[2,'Französisch'],it:[5,'Italienisch'],es:[4,'Spanisch'],pt:[8,'Portugiesisch'],ja:[7,'Japanisch'],ko:[10,'Koreanisch']};
+const VAR_LABEL={base:'Karte',normal:'Normal',holo:'Holo',reverse:'Reverse',firstEdition:'1. Ed.',wPromo:'W-Promo'};
+const REF_LABEL={low:'günstigster Preis',avg:'Durchschnitt',avg7:'Ø 7 Tage',avg30:'Ø 30 Tage',trend:'Preistrend'};
+const DAY=864e5;
+let msSaveT; function saveM(){ clearTimeout(msSaveT); msSaveT=setTimeout(()=>store.set('masters',M),300); }
+const eur = v => v==null ? '–' : v.toLocaleString('de-DE',{style:'currency',currency:'EUR'});
+const msKey = id => 'ms_'+S.lang+'_'+id;
+
+function trimCard(d){ return {id:d.id, localId:d.localId, name:d.name, image:d.image, rarity:d.rarity, variants:d.variants, cm:d.pricing?.cardmarket||null}; }
+async function loadSetData(id, force){
+  const key=msKey(id); let cached=msData[key]||await store.get(key);
+  if(cached && !force && Date.now()-cached.fetched<DAY){ msData[key]=cached; return cached; }
+  try{
+    const set=await api('/sets/'+encodeURIComponent(id));
+    const briefs=set.cards||[], out=new Array(briefs.length); let next=0, done=0;
+    msLoading={id,done:0,total:briefs.length}; renderMasters();
+    const worker=async()=>{ while(next<briefs.length){ const k=next++;
+      try{ out[k]=trimCard(await api('/cards/'+encodeURIComponent(briefs[k].id))); }catch(e){ out[k]={...briefs[k], cm:null, err:true}; }
+      msLoading.done=++done; updateLoading(); } };
+    await Promise.all(Array.from({length:6},worker));
+    out.sort((a,b)=>String(a.localId).localeCompare(String(b.localId),undefined,{numeric:true}));
+    const data={fetched:Date.now(), set:{id:set.id,name:set.name,logo:set.logo,releaseDate:set.releaseDate,serie:set.serie?.name,official:set.cardCount?.official,total:set.cardCount?.total}, cards:out};
+    msData[key]=data; store.set(key,data); return data;
+  }catch(e){ if(cached){ msData[key]=cached; toast('Keine Verbindung – zeige gespeicherte Preise'); return cached; } throw e; }
+  finally{ msLoading=null; }
+}
+function updateLoading(){ const p=$('#msProg'), b=$('#msProgBar'); if(!p||!msLoading) return; p.textContent=`${msLoading.done} von ${msLoading.total} Karten`; b.style.width=(msLoading.done/Math.max(1,msLoading.total)*100)+'%'; }
+
+function entriesOf(c,cfg){
+  const v=c.variants||{normal:true}, out=[];
+  if(cfg.variants){ ['normal','holo','firstEdition','wPromo'].forEach(k=>{ if(v[k]) out.push(k); }); }
+  if(!out.length) out.push('base');
+  if(cfg.reverse && v.reverse) out.push('reverse');
+  return out;
+}
+function isOwned(own,k){ if(!own) return false; if(k==='base') return !!(own.base||own.normal||own.holo||own.firstEdition||own.wPromo); return !!own[k]; }
+function priceOf(c,k){
+  const p=c.cm; if(!p) return null; const r=M.priceRef;
+  const keys = k==='reverse' ? [r+'-holo', r+'Holo', r+'_holo', 'reverseHolo'+r[0].toUpperCase()+r.slice(1)] : [r];
+  for(const key of keys){ const v=p[key]; if(typeof v==='number' && v>0) return v; }
+  return null;
+}
+function cmLink(c){ const [code]=CM_LANG[M.cmLang]||[3]; return `https://www.cardmarket.com/de/Pokemon/Products/Search?searchString=${encodeURIComponent(c.name)}&language=${code}`; }
+function cardsInScope(data,cfg){ if(cfg.secrets!==false || !data.set.official) return data.cards; return data.cards.filter(c=>{ const n=parseInt(c.localId,10); return isNaN(n) || n<=data.set.official; }); }
+function msStats(data,cfg){
+  let total=0,have=0,vHave=0,vMiss=0,noPrice=0;
+  cardsInScope(data,cfg).forEach(c=>entriesOf(c,cfg).forEach(k=>{ total++; const o=isOwned(cfg.owned[c.id],k), p=priceOf(c,k); if(p==null) noPrice++; if(o){ have++; vHave+=p||0; } else vMiss+=p||0; }));
+  return {total,have,vHave,vMiss,noPrice};
+}
+
+function renderMsSide(){
+  $('#msList').innerHTML = M.order.length ? M.order.map(id=>{ const s=M.sets[id], st=s.stats||{have:0,total:0}, pct=st.total?Math.round(st.have/st.total*100):0;
+    return `<button class="ms-item" data-set="${esc(id)}" aria-current="${id===M.active}">${s.logo?`<img src="${esc(s.logo)}.png" alt="" loading="lazy">`:'<span></span>'}<div><b>${esc(s.name)}</b><small>${st.total?`${st.have} / ${st.total} · ${pct} %`:'noch nicht geladen'}</small><div class="pbar"><i style="width:${pct}%"></i></div></div></button>`; }).join('')
+    : '<p class="hint">Noch keine Sets getrackt.</p>';
+  $('#msPriceRef').value=M.priceRef; $('#msCmLang').value=M.cmLang;
+}
+function msStatsHTML(data,cfg){
+  const st=msStats(data,cfg), pct=st.total?st.have/st.total*100:0;
+  cfg.stats={have:st.have,total:st.total}; saveM();
+  return `<div class="pbar big" aria-label="Fortschritt"><i style="width:${pct}%"></i></div>
+  <div class="kpis">
+    <div class="kpi"><small>Fortschritt</small><b>${pct.toLocaleString('de-DE',{maximumFractionDigits:1})} %</b><div class="sub">${st.have} von ${st.total} Einträgen</div></div>
+    <div class="kpi"><small>Wert gesammelt</small><b>${eur(st.vHave)}</b><div class="sub">${REF_LABEL[M.priceRef]}</div></div>
+    <div class="kpi"><small>Fehlt noch</small><b>${eur(st.vMiss)}</b><div class="sub">${st.total-st.have} Einträge offen</div></div>
+    <div class="kpi"><small>Masterset gesamt</small><b>${eur(st.vHave+st.vMiss)}</b><div class="sub">${st.noPrice?`${st.noPrice} ohne Preis`:'alle mit Preis'}</div></div>
+  </div>`;
+}
+function tileHTML(c,cfg){
+  const ents=entriesOf(c,cfg), own=cfg.owned[c.id], n=ents.filter(k=>isOwned(own,k)).length;
+  const cls=n===ents.length?'done':n?'part':'';
+  return `<div class="mc ${cls}" data-id="${esc(c.id)}">
+    <button class="ph" data-ms="all" title="Alles abhaken oder zurücksetzen">${c.image?`<img src="${esc(c.image)}/low.webp" loading="lazy" alt="${esc(c.name)}">`:`<span class="hint" style="display:grid;place-items:center;height:100%">kein Bild</span>`}${cls==='done'?'<span class="ck">✓</span>':''}</button>
+    <div class="t"><b title="${esc(c.name)}">${esc(c.name)}</b><span class="mono">${esc(c.localId)}</span></div>
+    <div class="r">${esc(c.rarity||'–')}</div>
+    <div class="vars">${ents.map(k=>`<button data-ms="tog" data-k="${k}" aria-pressed="${isOwned(own,k)}">${VAR_LABEL[k]}<span>${eur(priceOf(c,k))}</span></button>`).join('')}</div>
+    <a href="${esc(cmLink(c))}" target="_blank" rel="noopener">Auf Cardmarket ansehen ↗</a>
+  </div>`;
+}
+function visibleCards(data,cfg){
+  let list=cardsInScope(data,cfg);
+  if(msQuery){ const q=msQuery.toLowerCase(); list=list.filter(c=>c.name.toLowerCase().includes(q)||String(c.localId).toLowerCase()===q||(c.rarity||'').toLowerCase().includes(q)); }
+  if(msFilter!=='all') list=list.filter(c=>{ const e=entriesOf(c,cfg), n=e.filter(k=>isOwned(cfg.owned[c.id],k)).length; return msFilter==='missing' ? n<e.length : n===e.length; });
+  if(msSort==='price') list=[...list].sort((a,b)=>(priceOf(b,entriesOf(b,cfg)[0])||0)-(priceOf(a,entriesOf(a,cfg)[0])||0));
+  return list;
+}
+function renderMsGrid(data,cfg){ const list=visibleCards(data,cfg); $('#msGrid').innerHTML=list.length?list.map(c=>tileHTML(c,cfg)).join(''):'<p class="hint">Keine Karten für diesen Filter.</p>'; }
+async function renderMasters(){
+  renderMsSide();
+  const main=$('#msMain'), id=M.active, cfg=M.sets[id];
+  if(!cfg){ main.innerHTML=`<div class="ms-empty"><h2>Mastersets tracken</h2><p>Wähle links ein Set und klicke „Tracken“. Danach hakst du ab, welche Karten du hast. Reverse Holos und Varianten kannst du pro Set mitzählen lassen, zu jedem Eintrag steht der aktuelle Cardmarket-Preis.</p></div>`; return; }
+  const data=msData[msKey(id)];
+  if(!data){
+    main.innerHTML=`<div class="ms-empty"><h2>${esc(cfg.name)}</h2><p>Lade Kartendetails und Preise …</p><p id="msProg" class="mono">${msLoading?`${msLoading.done} von ${msLoading.total} Karten`:''}</p><div class="pbar big"><i id="msProgBar" style="width:0"></i></div></div>`;
+    if(msLoading) return;
+    try{ await loadSetData(id); }catch(e){ main.innerHTML=`<div class="ms-empty"><h2>Set konnte nicht geladen werden</h2><p>${esc(e.message)} – prüfe die Internetverbindung.</p><button class="btn" data-ms="retry">Erneut laden</button></div>`; return; }
+    if(M.active===id && M.view==='masters') renderMasters(); return;
+  }
+  const s=data.set, upd=data.cards.find(c=>c.cm?.updated)?.cm.updated;
+  main.innerHTML=`
+  <div class="ms-head">${s.logo?`<img class="logo" src="${esc(s.logo)}.png" alt="">`:''}
+    <div style="min-width:0"><h2>${esc(s.name)}</h2><div class="meta">${[s.serie, s.releaseDate&&new Date(s.releaseDate).toLocaleDateString('de-DE'), s.official&&`${s.official} Karten + ${Math.max(0,(s.total||0)-s.official)} Secrets`, `Preise geladen ${new Date(data.fetched).toLocaleString('de-DE',{dateStyle:'short',timeStyle:'short'})}`, upd&&`Cardmarket-Stand ${new Date(upd).toLocaleDateString('de-DE')}`].filter(Boolean).map(esc).join(' · ')}</div></div>
+    <div class="grow"></div>
+    <button class="btn small" data-ms="refresh">Preise aktualisieren</button>
+    <button class="btn small" data-ms="untrack">Nicht mehr tracken</button>
+  </div>
+  <div id="msStats" style="display:flex;flex-direction:column;gap:10px">${msStatsHTML(data,cfg)}</div>
+  <div class="ms-tools">
+    <label class="ctl"><input type="checkbox" data-cfg="reverse" ${cfg.reverse?'checked':''}> Reverse Holos mitzählen</label>
+    <label class="ctl"><input type="checkbox" data-cfg="variants" ${cfg.variants?'checked':''}> Varianten einzeln zählen (Normal / Holo / 1. Ed.)</label>
+    <label class="ctl"><input type="checkbox" data-cfg="secrets" ${cfg.secrets!==false?'checked':''}> Secret Rares mitzählen</label>
+  </div>
+  <div class="ms-tools">
+    <div class="chips">${[['all','Alle'],['missing','Fehlend'],['owned','Komplett']].map(([v,l])=>`<button data-ms="filter" data-v="${v}" aria-pressed="${msFilter===v}">${l}</button>`).join('')}</div>
+    <input type="text" id="msQ" placeholder="Name, Nummer oder Seltenheit" value="${esc(msQuery)}" style="flex:1;min-width:160px">
+    <select id="msSort" class="full" style="flex:0 0 auto"><option value="num">Nach Nummer</option><option value="price">Nach Preis</option></select>
+  </div>
+  <div id="msGrid"></div>`;
+  $('#msSort').value=msSort;
+  renderMsGrid(data,cfg);
+}
+function setView(v){
+  M.view=v; saveM();
+  document.body.classList.toggle('mode-masters',v==='masters');
+  if(v==='masters') document.body.dataset.m='masters'; else if(document.body.dataset.m==='masters'||!document.body.dataset.m) document.body.dataset.m='binder';
+  updMnav();
+  $('#binderView').hidden=v!=='binder'; $('#mastersView').hidden=v!=='masters';
+  document.querySelectorAll('.seg button').forEach(b=>b.setAttribute('aria-selected',b.dataset.view===v));
+  if(v==='masters') renderMasters(); else renderSpread();
+}
+function bindMasters(){
+  document.querySelectorAll('.seg button').forEach(b=>b.onclick=()=>setView(b.dataset.view));
+  $('#msCmLang').innerHTML=Object.entries(CM_LANG).map(([k,[,l]])=>`<option value="${k}">${l}</option>`).join('');
+  $('#msPriceRef').onchange=e=>{ M.priceRef=e.target.value; saveM(); renderMasters(); };
+  $('#msCmLang').onchange=e=>{ M.cmLang=e.target.value; saveM(); renderMasters(); };
+  $('#msAddBtn').onclick=()=>{ const id=$('#msAddSel').value; if(!id){ toast('Bitte zuerst ein Set wählen'); return; }
+    if(!M.sets[id]){ const s=(setsCache[S.lang]||[]).find(x=>x.id===id)||{name:id}; M.sets[id]={name:s.name, logo:s.logo||null, reverse:true, variants:false, secrets:true, owned:{}, stats:null}; M.order.push(id); }
+    M.active=id; saveM(); renderMasters(); };
+  $('#msList').onclick=e=>{ const b=e.target.closest('[data-set]'); if(b){ M.active=b.dataset.set; saveM(); renderMasters(); } };
+  const main=$('#msMain');
+  main.onclick=async e=>{
+    const b=e.target.closest('[data-ms]'); if(!b) return; const act=b.dataset.ms, id=M.active, cfg=M.sets[id], data=msData[msKey(id)];
+    if(act==='retry'){ renderMasters(); return; }
+    if(act==='refresh'){ delete msData[msKey(id)]; b.disabled=true; try{ await loadSetData(id,true); toast('Preise aktualisiert'); }catch(err){ toast('Aktualisieren fehlgeschlagen'); } renderMasters(); return; }
+    if(act==='untrack'){ if(!b.dataset.armed){ b.dataset.armed='1'; b.textContent='Wirklich entfernen? Klick nochmal'; b.style.color='var(--warn)'; return; }
+      delete M.sets[id]; M.order=M.order.filter(x=>x!==id); M.active=M.order[0]||null; saveM(); renderMasters(); return; }
+    if(act==='filter'){ msFilter=b.dataset.v; main.querySelectorAll('[data-ms=filter]').forEach(x=>x.setAttribute('aria-pressed',x.dataset.v===msFilter)); renderMsGrid(data,cfg); return; }
+    const tile=b.closest('.mc'); if(!tile||!data) return; const c=data.cards.find(x=>x.id===tile.dataset.id); const own=cfg.owned[c.id]||(cfg.owned[c.id]={}); const ents=entriesOf(c,cfg);
+    if(act==='tog'){ const k=b.dataset.k; if(k==='base'){ const on=!isOwned(own,'base'); ['base','normal','holo','firstEdition','wPromo'].forEach(x=>delete own[x]); if(on) own.base=true; } else own[k]=!own[k]; }
+    if(act==='all'){ const full=ents.every(k=>isOwned(own,k)); if(full) cfg.owned[c.id]={}; else ents.forEach(k=>own[k]=true); }
+    if(!Object.values(cfg.owned[c.id]||{}).some(Boolean)) delete cfg.owned[c.id];
+    tile.outerHTML=tileHTML(c,cfg); $('#msStats').innerHTML=msStatsHTML(data,cfg); renderMsSide(); saveM();
+  };
+  main.onchange=e=>{
+    const cfg=M.sets[M.active], data=msData[msKey(M.active)]; if(!cfg) return;
+    const f=e.target.dataset.cfg;
+    if(f){ cfg[f]=e.target.checked;
+      if(f==='variants' && cfg.variants && data) data.cards.forEach(c=>{ const o=cfg.owned[c.id]; if(o&&o.base){ const first=entriesOf(c,cfg)[0]; if(first!=='base'){ o[first]=true; delete o.base; } } });
+      saveM(); renderMasters(); return; }
+    if(e.target.id==='msSort'){ msSort=e.target.value; renderMsGrid(data,cfg); }
+  };
+  main.oninput=e=>{ if(e.target.id==='msQ'){ msQuery=e.target.value.trim(); renderMsGrid(msData[msKey(M.active)],M.sets[M.active]); } };
+}
+
+/* ---------- tabs ---------- */
+function switchTab(t){ document.querySelectorAll('.tabs button').forEach(b=>b.setAttribute('aria-selected',b.dataset.tab===t)); ['cards','arts','list'].forEach(x=>$('#pane-'+x).hidden=x!==t); if(isPhone()&&document.body.dataset.m!==t&&M.view!=='masters'){ document.body.dataset.m=t; updMnav(); } }
+function updMnav(){ document.querySelectorAll('#mnav [data-m]').forEach(b=>b.setAttribute('aria-current',b.dataset.m===document.body.dataset.m)); }
+function showM(m){
+  $('#app>header').classList.remove('open');
+  if(m==='masters'){ document.body.dataset.m='masters'; setView('masters'); }
+  else { document.body.dataset.m=m; if(M.view!=='binder') setView('binder'); if(m==='binder') renderSpread(); else switchTab(m); }
+  updMnav(); window.scrollTo(0,0);
+}
+
+/* ---------- events ---------- */
+function bind(){
+  document.querySelectorAll('.tabs button').forEach(b=>b.onclick=()=>switchTab(b.dataset.tab));
+  $('#binderName').oninput=e=>{ S.name=e.target.value; save(); };
+  $('#grid').onchange=e=>{
+    const [c,r]=e.target.value.split('x').map(Number);
+    S.pages.forEach(p=>{ const old=p.slots, n=Array(c*r).fill(null); old.forEach((card,i)=>{ const oc=i%S.cols, orr=Math.floor(i/S.cols); if(oc<c&&orr<r) n[orr*c+oc]=card; }); p.slots=n; });
+    S.arts=S.arts.map(a=>{ const side=a.x>=S.cols?1:0; const lx=a.x-side*S.cols; const nx=side*c+Math.min(lx,c-1); const spansBoth=a.x<S.cols&&a.x+a.w>S.cols;
+      const nw=spansBoth? (c-Math.min(lx,c-1)) + Math.min(a.x+a.w-S.cols,c) : Math.min(a.w,c-Math.min(lx,c-1));
+      return {...a,x:nx,w:Math.max(1,nw),y:Math.min(a.y,r-1),h:Math.max(1,Math.min(a.h,r-Math.min(a.y,r-1)))}; });
+    S.cols=c; S.rows=r; sel=null; commit();
+  };
+  $('#spPlus').onclick=()=>{ S.pages.push(newPage(),newPage()); commit(); };
+  $('#spMinus').onclick=()=>{ const s=nSpreads()-1; if(s<1) return;
+    if(S.pages[2*s].slots.some(Boolean)||S.pages[2*s+1].slots.some(Boolean)||S.arts.some(a=>a.spread===s)){ toast('Die letzte Doppelseite ist nicht leer'); return; }
+    S.pages.splice(2*s,2); if(S.spread>=nSpreads()) S.spread=nSpreads()-1; commit(); };
+  $('#dimMissing').onchange=e=>{ S.dimMissing=e.target.checked; commit(); };
+  $('#prevSp').onclick=()=>stepPage(-1);
+  $('#nextSp').onclick=()=>stepPage(1);
+  $('#strip').onclick=e=>{ const b=e.target.closest('[data-sp]'); if(b){ S.spread=+b.dataset.sp; phoneSide=0; sel=null; commit(); } };
+  // Wischen zum Blättern (Touch)
+  let sw=null; const stageEl=$('#stage');
+  stageEl.addEventListener('touchstart',e=>{ sw = (pick||e.touches.length>1) ? null : {x:e.touches[0].clientX,y:e.touches[0].clientY,t:Date.now()}; },{passive:true});
+  stageEl.addEventListener('touchend',e=>{ if(!sw||pick) return; const t=e.changedTouches[0], dx=t.clientX-sw.x, dy=t.clientY-sw.y; if(Math.abs(dx)>60&&Math.abs(dx)>2*Math.abs(dy)&&Date.now()-sw.t<700) stepPage(dx<0?1:-1); sw=null; },{passive:true});
+  // Mobile: Menü + untere Navigation
+  $('#menuBtn').onclick=()=>{ const h=$('#app>header'); const o=h.classList.toggle('open'); $('#menuBtn').setAttribute('aria-expanded',o); };
+  $('#mnav').onclick=e=>{ const b=e.target.closest('[data-m]'); if(b) showM(b.dataset.m); };
+  $('#stagePickCancel').onclick=()=>{ const back=pick&&isPhone(); pick=null; renderAll(); if(back) showM('arts'); };
+
+  // search
+  $('#searchForm').onsubmit=e=>{ e.preventDefault(); search(); };
+  $('#setSel').onchange=()=>search();
+  $('#raritySel').onchange=()=>search();
+  $('#moreBtn').onclick=()=>search(true);
+  $('#resetSearch').onclick=()=>{ $('#q').value=''; $('#artist').value=''; $('#setSel').value=''; $('#raritySel').value=''; results=[]; renderResults(); status(''); $('#moreBtn').hidden=true; };
+  $('#langSel').innerHTML=Object.entries(LANGS).map(([k,v])=>`<option value="${k}">${v}</option>`).join('');
+  $('#langSel').onchange=async e=>{ S.lang=e.target.value; save(); $('#setSel').value=''; await loadSets(); loadRarities(); if($('#q').value.trim()) search(); };
+  $('#results').onclick=e=>{ const b=e.target.closest('.res'); if(b) placeAtSelection(results[+b.dataset.k]); };
+  $('#results').ondragstart=e=>{ const b=e.target.closest('.res'); if(!b) return; e.dataTransfer.setData('text/plain','card:'+b.dataset.k); e.dataTransfer.effectAllowed='copy'; };
+  $('#customUrlBtn').onclick=()=>{ const v=$('#customUrl').value.trim(); if(!/^https?:\/\//.test(v)){ toast('Bitte eine Bild-URL mit https:// einfügen'); return; } placeAtSelection({id:'custom-'+uid(), name:'Eigene Karte', img:v, custom:true}); $('#customUrl').value=''; };
+  $('#customFileBtn').onclick=()=>$('#customFile').click();
+  $('#customFile').onchange=async e=>{ const f=e.target.files[0]; if(!f) return; placeAtSelection({id:'custom-'+uid(), name:f.name.replace(/\.[^.]+$/,''), img:await readFile(f), custom:true}); e.target.value=''; };
+
+  // spread interactions
+  const spread=$('#spread');
+  spread.onclick=e=>{
+    if(pick) return;
+    const slot=e.target.closest('.slot'); if(!slot) return;
+    const p=+slot.dataset.p, i=+slot.dataset.i, act=e.target.closest('[data-act]')?.dataset.act;
+    if(act==='del'){ S.pages[p].slots[i]=null; commit(); return; }
+    if(act==='own'){ const c=S.pages[p].slots[i]; c.owned=!c.owned; commit(); return; }
+    sel = sel&&sel.p===p&&sel.i===i ? null : {p,i}; renderSpread();
+  };
+  spread.ondragstart=e=>{ const s=e.target.closest('.slot'); if(!s||pick) return; e.dataTransfer.setData('text/plain','slot:'+s.dataset.p+','+s.dataset.i); e.dataTransfer.effectAllowed='move'; };
+  spread.ondragover=e=>{ const s=e.target.closest('.slot'); if(!s) return; e.preventDefault(); spread.querySelectorAll('.dragover').forEach(x=>x!==s&&x.classList.remove('dragover')); s.classList.add('dragover'); };
+  spread.ondragleave=e=>{ const s=e.target.closest('.slot'); if(s&&!s.contains(e.relatedTarget)) s.classList.remove('dragover'); };
+  spread.ondrop=e=>{
+    const s=e.target.closest('.slot'); if(!s) return; e.preventDefault();
+    const p=+s.dataset.p, i=+s.dataset.i, d=e.dataTransfer.getData('text/plain');
+    if(d.startsWith('card:')) placeCard(results[+d.slice(5)],p,i);
+    else if(d.startsWith('slot:')){ const [sp,si]=d.slice(5).split(',').map(Number); const t=S.pages[p].slots[i]; S.pages[p].slots[i]=S.pages[sp].slots[si]; S.pages[sp].slots[si]=t; sel={p,i}; commit(); }
+    else if(e.dataTransfer.files.length){ const f=e.dataTransfer.files[0]; if(f.type.startsWith('image/')) readFile(f).then(img=>placeCard({id:'custom-'+uid(),name:f.name.replace(/\.[^.]+$/,''),img,custom:true},p,i)); }
+  };
+  // area picking for artworks (pointer, works with touch)
+  spread.onpointerdown=e=>{ if(!pick) return; const s=e.target.closest('.slot'); if(!s) return; e.preventDefault(); pick.start=pick.end={gc:+s.dataset.gc,r:+s.dataset.r}; renderSpread(); };
+  window.addEventListener('pointermove',e=>{ if(!pick||!pick.start) return; const s=document.elementFromPoint(e.clientX,e.clientY)?.closest?.('.slot'); if(!s) return; const gc=+s.dataset.gc, r=+s.dataset.r; if(pick.end.gc!==gc||pick.end.r!==r){ pick.end={gc,r}; renderSpread(); } });
+  window.addEventListener('pointerup',()=>{ if(pick&&pick.start) finishPick(); });
+  document.addEventListener('keydown',e=>{
+    if(e.target.matches('input,select,textarea')) return;
+    if((e.key==='Delete'||e.key==='Backspace')&&sel&&S.pages[sel.p].slots[sel.i]){ S.pages[sel.p].slots[sel.i]=null; commit(); }
+    if(e.key==='Escape'){ if(pick){ pick=null; renderAll(); } else if(sel){ sel=null; renderSpread(); } }
+    if(e.key==='ArrowRight'&&!sel) stepPage(1);
+    if(e.key==='ArrowLeft'&&!sel) stepPage(-1);
+  });
+
+  // artworks panel
+  $('#artFileBtn').onclick=()=>$('#artFile').click();
+  $('#artFile').onchange=e=>{ addArtFiles([...e.target.files]); e.target.value=''; };
+  const drop=$('#artDrop');
+  drop.ondragover=e=>{ e.preventDefault(); drop.classList.add('over'); };
+  drop.ondragleave=()=>drop.classList.remove('over');
+  drop.ondrop=e=>{ e.preventDefault(); drop.classList.remove('over'); const url=e.dataTransfer.getData('text/uri-list'); if(e.dataTransfer.files.length) addArtFiles([...e.dataTransfer.files]); else if(url) addArt(url.split('\n')[0], 'Artwork'); };
+  $('#artUrlBtn').onclick=()=>{ const v=$('#artUrl').value.trim(); if(!/^https?:\/\//.test(v)){ toast('Bitte eine Bild-URL mit https:// einfügen'); return; } addArt(v, decodeURIComponent(v.split('/').pop().split('?')[0]).replace(/\.[^.]+$/,'')||'Artwork'); $('#artUrl').value=''; };
+  document.addEventListener('paste',e=>{ if(e.target.matches('input')) return; const f=[...(e.clipboardData?.files||[])].filter(f=>f.type.startsWith('image/')); if(f.length){ addArtFiles(f); } });
+  $('#pickCancel').onclick=()=>{ pick=null; renderAll(); };
+  const list=$('#artList');
+  list.onclick=e=>{
+    const box=e.target.closest('.art'); if(!box) return; const a=getArt(box.dataset.id); const act=e.target.closest('[data-act]')?.dataset.act; if(!act) return;
+    if(act==='select'){ activeArt = activeArt===a.id ? null : a.id; if(activeArt && a.spread!==S.spread){ S.spread=a.spread; } renderAll(); return; }
+    if(act==='pick'){ pick={artId:a.id}; if(a.spread!==S.spread) S.spread=a.spread; renderAll(); if(isPhone()){ showM('binder'); toast('Ziehe mit dem Finger über die Felder'); } return; }
+    if(act==='left'||act==='right'||act==='both'){ Object.assign(a,{spread:S.spread,y:0,h:S.rows,x:act==='right'?S.cols:0,w:act==='both'?2*S.cols:S.cols}); }
+    if(act==='front'){ S.arts=S.arts.filter(x=>x!==a); S.arts.push(a); }
+    if(act==='dup'){ const c={...a,id:uid(),name:a.name+' (Kopie)'}; S.arts.push(c); activeArt=c.id; }
+    if(act==='remove'){ S.arts=S.arts.filter(x=>x!==a); blobCache.delete(a.id); activeArt=null; }
+    commit();
+  };
+  list.oninput=e=>{
+    const box=e.target.closest('.art'); const a=getArt(box?.dataset.id); const f=e.target.dataset.field; if(!a||!f) return;
+    if(f==='name'){ a.name=e.target.value; box.querySelector('.art-head b').textContent=a.name; save(); return; }
+    a[f]=+e.target.value; const o=e.target.nextElementSibling; if(o) o.textContent=f==='zoom'?Math.round(a.zoom*100)+'%':Math.round(a[f]*100);
+    renderSpread(); save();
+  };
+  $('#gap').oninput=e=>{ S.gap=+e.target.value; $('#gapOut').textContent=S.gap+' mm'; renderSpread(); save(); };
+  $('#spine').oninput=e=>{ S.spine=+e.target.value; $('#spineOut').textContent=S.spine+' mm'; renderSpread(); save(); };
+
+  // list
+  $('#copyList').onclick=async()=>{
+    const txt=allCards().map(x=>`Seite ${x.p+1}, Feld ${x.i+1}: ${x.c.name} – ${x.c.setName||''} ${x.c.localId||''} ${x.c.owned?'[hab ich]':'[fehlt]'}`).join('\n');
+    try{ await navigator.clipboard.writeText(txt); toast('Liste kopiert'); }catch(e){ toast('Kopieren nicht erlaubt'); }
+  };
+
+  // export/import
+  $('#exportBtn').onclick=async()=>{
+    const json=JSON.stringify({...S, masters:M}), name=(S.name||'binder').replace(/[^\w\-äöüÄÖÜß ]+/g,'')+'.binder.json';
+    // iPhone: Teilen-Menü (AirDrop, Dateien sichern …)
+    try{ const f=new File([json],name,{type:'application/json'}); if(isPhone()&&navigator.canShare&&navigator.canShare({files:[f]})){ await navigator.share({files:[f],title:name}); return; } }catch(e){ if(e.name==='AbortError') return; }
+    const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([json],{type:'application/json'})); a.download=name; a.click(); setTimeout(()=>URL.revokeObjectURL(a.href),2000); };
+  $('#importBtn').onclick=()=>$('#importFile').click();
+  $('#importFile').onchange=async e=>{ const f=e.target.files[0]; if(!f) return; try{ const d=JSON.parse(await f.text()); if(!Array.isArray(d.pages)) throw 0; S=Object.assign({gap:3,spine:30,lang:'de',arts:[],spread:0},d); if(d.masters&&d.masters.sets){ M=Object.assign({sets:{},order:[],active:null,priceRef:'low',cmLang:'de'},d.masters,{view:M.view}); saveM(); if(M.view==='masters') renderMasters(); } delete S.masters; blobCache.clear(); sel=null; activeArt=null; normalize(); commit(); toast('Binder importiert'); }catch(_){ toast('Datei ist kein Binderplaner-Export'); } e.target.value=''; };
+
+  // print
+  $('#printBtn').onclick=()=>{ $('#skipCards').checked=S.skipCards; $('#cutLines').checked=S.cutLines; buildPrint(); $('#printModal').hidden=false; };
+  $('#closePrint').onclick=()=>$('#printModal').hidden=true;
+  $('#skipCards').onchange=e=>{ S.skipCards=e.target.checked; save(); buildPrint(); };
+  $('#cutLines').onchange=e=>{ S.cutLines=e.target.checked; save(); buildPrint(); };
+  $('#doPrint').onclick=()=>window.print();
+
+  new ResizeObserver(()=>renderSpread()).observe($('#stage'));
+}
+
+(async function init(){
+  const saved=await store.get('state');
+  if(saved && Array.isArray(saved.pages)){ S=saved; normalize(); } else defaultState();
+  const m=await store.get('masters'); if(m&&m.sets) M=Object.assign(M,m);
+  document.body.dataset.m = M.view==='masters' ? 'masters' : 'binder';
+  bind(); bindMasters(); $('#langSel').value=S.lang; renderAll(); setView(M.view||'binder');
+  await loadSets(); loadArtists(); loadRarities();
+  if(!saved){ $('#q').value='Pikachu'; search(); }
+})();
+</script>
+</body>
+</html>
