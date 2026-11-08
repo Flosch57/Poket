@@ -8,7 +8,8 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Binder">
 <meta name="theme-color" content="#181c26">
-<link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAIAAACyr5FlAAADT0lEQVR42u3dP07bYBjA4SRirCIWTsDCUHWpxNI19+AO5QK5QHuH3iNrxywVt2BBUQ7AULVCkWOC/b3fH/v5bUAcovjRZ0dgv8vbu/uF1NXKWyA4BIfgEByCQ3AIDsEhOASHBIfgEByCQ3AIDsEhOASH4JD+deUt+Nvh5fntl+vrG++JlaNDRud34CCDDzguEzBzHysyxj8GDvm0kqL99jhgq6/bTz0/fdwcBjznj906w5v46/Om+I58eNolf85l2guph7Ho9zGMxSU+Ljxk9HysrYFFHJG6DisjbSVcclpZMEJf0qq2XXvyJEl2bZwPJ6RqY9lI/sLgEByCQ3AIDsEhOASH4BAcgkOCQ3AIDsEhOASH4BAcgkNwSHAIDsGh2nH0Xwk97EmSXAmd53JqOGJ9dG4+cteSUdFhZbCPng0H72AyxhRyf44kxxe72Qmp4BAcgkNwCA4JDsEhOASH4BAcaihjvMr07eeXcz/6/f0PHEy885jiSkJwRIy/iBjTUaGMk8eX9XFVA4v/23b6GHO//f32WIOPj7I42bAUkbpOSCPGG0SM6cgjI+EzlMcRMf4iYkxHWzIK+vBRtgEZpXzA0YaMIj7gaEZGfh9wCI5JLBuZFw84BIfgmPwxJedvgUNwCA7BITgEh+AQHPMuz39t5fktcAgOwTGHI0u2/zeGQ3BMZfHIeZkCHC35yHwBCxzN+Mh/aRMcbfgoctFbShwREw4iJjE052Mil0NGTDiImMSQ38ewHTx4w0oPKxETDiImMdS/hEzzFgwREw6q2s3jfbh5ixb1C/BpRXAIDsEhOASH4BAcgkNwSHAIDsGh2EL+Khsx4SBiEoOyrhz77XHwjcbPbfi4OQy+q3rEnfbhKFPEHez5qAJHxISDiEkMckIqOASH4BAcgkNwCA7BIcEhOASH4BAcgkNwCA7BITgEhwSH4BAcgkNwtNfD027yLywljojxFxFjOpAts3JEjL+IGNMxycUj+etJf1iJGH8RMaYj1f6ohEjEy1je3t3P9rzh8PJ8ycPW1zdOSCU4PrIkzHbZsHK8s+/nLAOOPgEzlwHHWQdkLMx4o8HKITgEh+AQHIJDcAgOwSE4JDgEh+AQHIJDcAgOwSE4BIf0pldXPATE7ThWmgAAAABJRU5ErkJggg==">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="manifest.webmanifest">
 <title>Binderplaner</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23232836'/%3E%3Crect x='30' y='8' width='4' height='48' rx='2' fill='%23151821'/%3E%3Cg fill='%23f0a82a'%3E%3Crect x='9' y='10' width='8' height='11' rx='1.5'/%3E%3Crect x='19' y='10' width='8' height='11' rx='1.5' opacity='.55'/%3E%3Crect x='9' y='26.5' width='8' height='11' rx='1.5' opacity='.55'/%3E%3Crect x='19' y='26.5' width='8' height='11' rx='1.5'/%3E%3Crect x='9' y='43' width='8' height='11' rx='1.5'/%3E%3Crect x='19' y='43' width='8' height='11' rx='1.5' opacity='.55'/%3E%3Crect x='37' y='10' width='18' height='44' rx='2' fill='%23c4547a'/%3E%3Ccircle cx='46' cy='32' r='6' fill='%23ffe2a8'/%3E%3C/g%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -163,6 +164,16 @@ body.mode-masters header .bonly{display:none!important}
 .target{font-size:12.5px;padding:7px 10px;border-radius:8px;background:color-mix(in srgb,var(--sel) 12%,transparent);color:var(--ink)}
 .target b{color:var(--sel)}
 body{touch-action:manipulation}
+html,body{overscroll-behavior-y:none}
+@media (display-mode:standalone){ button,.res,.slot,.mc,#mnav{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none} }
+#installBar{position:fixed;left:max(12px,env(safe-area-inset-left,0px));right:max(12px,env(safe-area-inset-right,0px));bottom:calc(80px + env(safe-area-inset-bottom,0px));z-index:30;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:12px 14px;box-shadow:0 10px 30px rgba(0,0,0,.35);display:flex;gap:12px;align-items:center;font-size:13.5px}
+#installBar img{width:40px;height:40px;border-radius:9px;flex:none}
+#installBar div{flex:1;min-width:0}
+#installBar b{display:block;font-size:14px}
+#installBar .share{display:inline-block;vertical-align:-3px;width:16px;height:16px}
+@media (min-width:701px){ #installBar{left:auto;width:360px;bottom:20px} }
+#offlineDot{display:none;align-items:center;gap:5px;font-size:11.5px;font-weight:700;color:var(--warn);border:1px solid currentColor;border-radius:99px;padding:2px 8px}
+body.offline #offlineDot{display:inline-flex}
 @media (pointer:coarse){
   input,select,textarea{font-size:16px!important}
   .acts button{width:30px;height:30px;line-height:30px;font-size:14px}
@@ -177,7 +188,7 @@ body{touch-action:manipulation}
   #menuBtn{display:inline-flex}
   #binderName{order:5;width:100%;flex:1 1 100%}
   header .hctl{display:none!important}
-  header.open .hctl{display:flex!important}
+  header.open .hctl:not([hidden]){display:flex!important}
   body.mode-masters header.open .bonly{display:none!important}
   #mnav{display:grid;grid-template-columns:repeat(5,1fr);position:fixed;left:0;right:0;bottom:0;z-index:20;background:var(--panel);border-top:1px solid var(--line);padding:6px max(6px,env(safe-area-inset-right,0px)) calc(6px + env(safe-area-inset-bottom,0px)) max(6px,env(safe-area-inset-left,0px))}
   #mnav button{border:0;background:none;display:flex;flex-direction:column;align-items:center;gap:3px;font-size:10.5px;font-weight:600;color:var(--muted);padding:3px 0}
@@ -289,6 +300,8 @@ body{touch-action:manipulation}
     </div>
     <input id="binderName" class="bonly" type="text" aria-label="Name des Binders">
     <div class="grow"></div>
+    <span id="offlineDot" title="Keine Internetverbindung">● Offline</span>
+    <button class="btn hctl" id="installBtn" hidden>App installieren</button>
     <button class="btn" id="menuBtn" aria-expanded="false" aria-label="Einstellungen">⋯</button>
     <label class="ctl bonly hctl">Raster
       <select id="grid">
@@ -410,6 +423,12 @@ body{touch-action:manipulation}
   <button data-m="list"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 6h11M9 12h11M9 18h11"/><circle cx="4.5" cy="6" r="1"/><circle cx="4.5" cy="12" r="1"/><circle cx="4.5" cy="18" r="1"/></svg>Liste</button>
   <button data-m="masters"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="m8 12 3 3 5-6"/></svg>Mastersets</button>
 </nav>
+
+<div id="installBar" hidden role="dialog" aria-label="App installieren">
+  <img src="apple-touch-icon.png" alt="">
+  <div><b>Als App installieren</b>Tippe unten auf <svg class="share" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12M8 7l4-4 4 4M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"/></svg> <b style="display:inline">Teilen</b> und dann auf <b style="display:inline">„Zum Home-Bildschirm“</b>.</div>
+  <button class="btn small" id="installClose" aria-label="Hinweis schließen">✕</button>
+</div>
 
 <div id="printModal" hidden>
   <div class="pm-head">
@@ -1036,12 +1055,42 @@ function bind(){
   new ResizeObserver(()=>renderSpread()).observe($('#stage'));
 }
 
+/* ---------- Web-App (PWA) ---------- */
+function initPWA(){
+  const standalone = matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
+  const hosted = location.protocol === 'https:' || location.hostname === 'localhost';
+  // Offline-Fähigkeit
+  if(hosted && 'serviceWorker' in navigator){
+    const hadController = !!navigator.serviceWorker.controller;
+    navigator.serviceWorker.register('sw.js').catch(()=>{});
+    navigator.serviceWorker.addEventListener('controllerchange',()=>{ if(hadController) toast('Update geladen – wird beim nächsten Start aktiv'); });
+  }
+  // Gespeicherte Daten vor automatischem Löschen schützen
+  try{ navigator.storage?.persist?.(); }catch(e){}
+  // Online/Offline
+  const net=()=>{ document.body.classList.toggle('offline',!navigator.onLine); };
+  addEventListener('online',()=>{ net(); toast('Wieder online'); }); addEventListener('offline',()=>{ net(); toast('Offline – Binder funktioniert, Suche und Preise brauchen Internet'); }); net();
+  // Installieren: Android/Chrome/Edge über Systemdialog
+  let deferred=null;
+  addEventListener('beforeinstallprompt',e=>{ e.preventDefault(); deferred=e; $('#installBtn').hidden=false; });
+  $('#installBtn').onclick=async()=>{ if(!deferred) return; deferred.prompt(); await deferred.userChoice.catch(()=>{}); deferred=null; $('#installBtn').hidden=true; };
+  addEventListener('appinstalled',()=>{ $('#installBtn').hidden=true; toast('Binderplaner installiert'); });
+  // Installieren: iPhone/iPad-Hinweis (Safari kann das nicht per Knopf)
+  const ios=/iphone|ipad|ipod/i.test(navigator.userAgent) || (navigator.platform==='MacIntel' && navigator.maxTouchPoints>1);
+  let dismissed=false; try{ dismissed=localStorage.getItem('bp_install_hint')==='1'; }catch(e){}
+  if(hosted && ios && !standalone && !dismissed) setTimeout(()=>{ $('#installBar').hidden=false; },1500);
+  $('#installClose').onclick=()=>{ $('#installBar').hidden=true; try{ localStorage.setItem('bp_install_hint','1'); }catch(e){} };
+  // Shortcuts vom Homescreen-Symbol (#suche, #mastersets)
+  const route=()=>{ const h=location.hash.slice(1); if(h==='suche') showM('cards'); else if(h==='mastersets') showM('masters'); else if(h==='binder') showM('binder'); };
+  addEventListener('hashchange',route); route();
+}
+
 (async function init(){
   const saved=await store.get('state');
   if(saved && Array.isArray(saved.pages)){ S=saved; normalize(); } else defaultState();
   const m=await store.get('masters'); if(m&&m.sets) M=Object.assign(M,m);
   document.body.dataset.m = M.view==='masters' ? 'masters' : 'binder';
-  bind(); bindMasters(); $('#langSel').value=S.lang; renderAll(); setView(M.view||'binder');
+  bind(); bindMasters(); $('#langSel').value=S.lang; renderAll(); setView(M.view||'binder'); initPWA();
   await loadSets(); loadArtists(); loadRarities();
   if(!saved){ $('#q').value='Pikachu'; search(); }
 })();

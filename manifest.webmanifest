@@ -1,0 +1,21 @@
+{
+  "name": "Binderplaner",
+  "short_name": "Binder",
+  "description": "Pokémon-Binderseiten planen, Michi-Artworks drucken und Mastersets tracken.",
+  "lang": "de",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#10131a",
+  "theme_color": "#181c26",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    { "name": "Karten suchen", "short_name": "Suche", "url": "./#suche", "icons": [{ "src": "icon-192.png", "sizes": "192x192" }] },
+    { "name": "Mastersets", "short_name": "Mastersets", "url": "./#mastersets", "icons": [{ "src": "icon-192.png", "sizes": "192x192" }] }
+  ]
+}
